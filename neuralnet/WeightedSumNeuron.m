@@ -17,7 +17,7 @@
     for (int i = 0; i < [[self inputs] count]; i++) {
         AbstractNeuron *neuron = [self inputs][i];
         CGFloat weight = [[self weights][i] doubleValue];
-        val += [neuron output] * weight;
+        val += [neuron activation] * weight;
     }
 
     [self setCurrentValue:val];
@@ -27,7 +27,7 @@
 {
     // when we do our forwardPass, our output is = input * weight.
     // our our error = f(weight) = (input * weight - goal)^2
-    CGFloat err = [self output] - goal;
+    CGFloat err = [self activation] - goal;
     return err * err;
 }
 
@@ -64,12 +64,12 @@
 {
     AbstractNeuron *inputNeuron = [self inputs][neuronIndex];
     CGFloat weight = [[self weights][neuronIndex] doubleValue];
-    CGFloat input = [inputNeuron output];
+    CGFloat input = [inputNeuron activation];
     CGFloat derivative = 2 * input * (input * weight - goal);
 
 #ifdef DEBUG
     CGFloat rawError = [self simpleErrorFor:goal];
-    CGFloat dirAndAmount = rawError * [inputNeuron output];
+    CGFloat dirAndAmount = rawError * [inputNeuron activation];
 
     NSAssert(derivative == dirAndAmount * 2, @"derivative is twice the dirAndAmount");
 #endif

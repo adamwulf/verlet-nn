@@ -11,7 +11,7 @@
 
 @interface AbstractNeuron : NSObject
 
-- (CGFloat)output;
+- (CGFloat)activation;
 
 - (void)addInput:(AbstractNeuron *)neuron withWeight:(CGFloat)initialWeight;
 

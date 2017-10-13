@@ -37,7 +37,7 @@
     // run the neural net
     [output forwardPass];
 
-    XCTAssertEqualWithAccuracy(.85, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.85, [output activation], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
@@ -54,7 +54,7 @@
     // run the neural net
     [output forwardPass];
 
-    XCTAssertEqualWithAccuracy(.98, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.98, [output activation], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
@@ -74,9 +74,9 @@
     [output2 forwardPass];
     [output3 forwardPass];
 
-    XCTAssertEqualWithAccuracy(.195, [output1 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.13, [output2 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.585, [output3 output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.195, [output1 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.13, [output2 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.585, [output3 activation], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
@@ -106,9 +106,9 @@
     [output2 forwardPass];
     [output3 forwardPass];
 
-    XCTAssertEqualWithAccuracy(.555, [output1 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.98, [output2 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.965, [output3 output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.555, [output1 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.98, [output2 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.965, [output3 activation], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
@@ -159,14 +159,14 @@
     [output2 forwardPass];
     [output3 forwardPass];
 
-    XCTAssertEqualWithAccuracy(.86, [hidden1 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.295, [hidden2 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(1.23, [hidden3 output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.86, [hidden1 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.295, [hidden2 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(1.23, [hidden3 activation], .0000000000001, @"prediction is correct");
 
     // note, the book rounds outputs 1 and 3 to 3 digits
-    XCTAssertEqualWithAccuracy(.2135, [output1 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.145, [output2 output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(.5065, [output3 output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.2135, [output1 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.145, [output2 activation], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.5065, [output3 activation], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
@@ -181,7 +181,7 @@
 
     const CGFloat kGoal = 0.8;
 
-    XCTAssertEqualWithAccuracy(0.25, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.25, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(-0.55, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.3025, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 }
@@ -198,20 +198,20 @@
     // run the neural net
     [output forwardPass];
 
-    XCTAssertEqualWithAccuracy(0.25, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.25, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(-0.55, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.3025, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
     [output forwardPass];
 
-    XCTAssertEqualWithAccuracy(0.3875, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.3875, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.17015625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
     [output forwardPass];
 
-    XCTAssertEqualWithAccuracy(0.490625, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.490625, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.095712890625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     for (int i = 4; i <= 20; i++) {
@@ -220,7 +220,7 @@
     }
 
     // the book truncates the output number
-    XCTAssertEqualWithAccuracy(0.79767444457811509, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.79767444457811509, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.00000540820802026, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 }
 
@@ -236,7 +236,7 @@
 
     const CGFloat kGoal = 1.0;
 
-    XCTAssertEqualWithAccuracy(0.85, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.85, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(-0.15, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.0225, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
@@ -257,7 +257,7 @@
 
     const CGFloat kGoal = 0.8;
 
-    XCTAssertEqualWithAccuracy(0.0, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.0, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(-0.8, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.64, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 

@@ -26,7 +26,7 @@
     return self;
 }
 
-- (CGFloat)output
+- (CGFloat)activation
 {
     return _currentValue;
 }
@@ -62,7 +62,7 @@
     // if our value is lower than the goal,
     // then our error will be < 0, to signify
     // that we're below where we should be.
-    return [self output] - goal;
+    return [self activation] - goal;
 }
 
 - (CGFloat)errorFor:(CGFloat)goal

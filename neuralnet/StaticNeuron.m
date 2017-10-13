@@ -20,7 +20,7 @@
     return self;
 }
 
-- (CGFloat)output
+- (CGFloat)activation
 {
     return _value;
 }
