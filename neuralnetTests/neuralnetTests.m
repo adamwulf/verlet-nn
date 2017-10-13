@@ -172,7 +172,7 @@
 // test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testChapter4Page50
 {
-    StaticNeuron *input = [[StaticNeuron alloc] initWithValue:.5];
+    StaticNeuron *input = [[StaticNeuron alloc] initWithValue:0.5];
     WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
     [output addInput:input withWeight:0.5];
 
@@ -222,6 +222,66 @@
     // the book truncates the output number
     XCTAssertEqualWithAccuracy(0.79767444457811509, [output output], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.00000540820802026, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+}
+
+// test case from Grokking Deep Learning book by Andrew W. Trask
+- (void)testChapter4Page59
+{
+    StaticNeuron *input = [[StaticNeuron alloc] initWithValue:8.5];
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
+    [output addInput:input withWeight:0.1];
+
+    // run the neural net
+    [output forwardPass];
+
+    const CGFloat kGoal = 1.0;
+
+    XCTAssertEqualWithAccuracy(0.85, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(-0.15, [output rawErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.0225, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+
+    [output backPropagateFor:kGoal withLearningRate:0.01];
+
+    XCTAssertEqualWithAccuracy(0.11275, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
+}
+
+// test case from Grokking Deep Learning book by Andrew W. Trask
+- (void)testChapter4Page62
+{
+    StaticNeuron *input = [[StaticNeuron alloc] initWithValue:1.1];
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
+    [output addInput:input withWeight:0.0];
+
+    // run the neural net
+    [output forwardPass];
+
+    const CGFloat kGoal = 0.8;
+
+    XCTAssertEqualWithAccuracy(0.0, [output output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(-0.8, [output rawErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.64, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+
+    [output backPropagateFor:kGoal];
+
+    XCTAssertEqualWithAccuracy(0.88, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
+
+    [output forwardPass];
+    [output backPropagateFor:kGoal];
+
+    // the book rounds this value
+    XCTAssertEqualWithAccuracy(0.6952, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
+
+    [output forwardPass];
+    [output backPropagateFor:kGoal];
+
+    // the book rounds this value
+    XCTAssertEqualWithAccuracy(0.734008, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
+
+    [output forwardPass];
+    [output backPropagateFor:kGoal];
+
+    // the book rounds this value
+    XCTAssertEqualWithAccuracy(0.72585832, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 }
 
 @end
