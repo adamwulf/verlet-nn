@@ -11,10 +11,13 @@
 @interface AbstractNeuron ()
 
 @property(nonatomic, readonly) NSMutableArray *inputs;
+@property(nonatomic, readonly) NSMutableArray *outputs;
 @property(nonatomic, readonly) NSMutableArray *weights;
 
 @property(nonatomic, assign) CGFloat currentValue;
 
 - (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal;
+
+- (void)addOutput:(AbstractNeuron *)neuron;
 
 @end

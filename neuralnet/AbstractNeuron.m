@@ -13,6 +13,7 @@
 @implementation AbstractNeuron
 
 @synthesize inputs = _inputs;
+@synthesize outputs = _outputs;
 @synthesize weights = _weights;
 @synthesize currentValue = _currentValue;
 
@@ -20,6 +21,7 @@
 {
     if (self = [super init]) {
         _inputs = [NSMutableArray array];
+        _outputs = [NSMutableArray array];
         _weights = [NSMutableArray array];
         _currentValue = 0;
     }
@@ -35,6 +37,12 @@
 {
     [_inputs addObject:neuron];
     [_weights addObject:@(initialWeight)];
+    [neuron addOutput:self];
+}
+
+- (void)addOutput:(AbstractNeuron *)neuron
+{
+    [_outputs addObject:neuron];
 }
 
 - (CGFloat)weightForNeuron:(AbstractNeuron *)neuron
