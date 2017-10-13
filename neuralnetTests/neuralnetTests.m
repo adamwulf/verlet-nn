@@ -293,4 +293,66 @@
     XCTAssertEqualWithAccuracy(0.72585832, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 }
 
+// https://mattmazur.com/2015/03/17/a-step-by-step-backpropagation-example/
+- (void)testMattMazurExample
+{
+    StaticNeuron *input1 = [[StaticNeuron alloc] initWithValue:0.05];
+    StaticNeuron *input2 = [[StaticNeuron alloc] initWithValue:0.1];
+    StaticNeuron *bias = [[StaticNeuron alloc] initWithValue:1.0];
+
+    SigmoidNeuron *hidden1 = [[SigmoidNeuron alloc] init];
+    [hidden1 addInput:input1 withWeight:0.15];
+    [hidden1 addInput:input2 withWeight:0.2];
+    [hidden1 addInput:bias withWeight:0.35];
+
+    SigmoidNeuron *hidden2 = [[SigmoidNeuron alloc] init];
+    [hidden2 addInput:input1 withWeight:0.25];
+    [hidden2 addInput:input2 withWeight:0.3];
+    [hidden2 addInput:bias withWeight:0.35];
+
+    SigmoidNeuron *output1 = [[SigmoidNeuron alloc] init];
+    [output1 addInput:hidden1 withWeight:0.4];
+    [output1 addInput:hidden2 withWeight:0.45];
+    [output1 addInput:bias withWeight:0.6];
+
+    SigmoidNeuron *output2 = [[SigmoidNeuron alloc] init];
+    [output2 addInput:hidden1 withWeight:0.5];
+    [output2 addInput:hidden2 withWeight:0.55];
+    [output2 addInput:bias withWeight:0.6];
+
+    const CGFloat alpha = 0.5;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [hidden1 forwardPass];
+        [hidden2 forwardPass];
+        [output1 forwardPass];
+        [output2 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat, CGFloat) = ^(CGFloat goal1, CGFloat goal2) {
+        [output1 backpropagateFor:goal1];
+        [output2 backpropagateFor:goal2];
+        [hidden1 backpropagate];
+        [hidden2 backpropagate];
+        [output1 updateWeightsWithAlpha:alpha];
+        [output2 updateWeightsWithAlpha:alpha];
+        [hidden1 updateWeightsWithAlpha:alpha];
+        [hidden2 updateWeightsWithAlpha:alpha];
+    };
+
+    forwardPass();
+    backwardPass(0.01, 0.99);
+
+    XCTAssertEqualWithAccuracy(0.1497807161327628, [hidden1 weightForNeuron:input1], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.1995614322655257, [hidden1 weightForNeuron:input2], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.2497511436323696, [hidden2 weightForNeuron:input1], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.2995022872647392, [hidden2 weightForNeuron:input2], .0000000000001, @"prediction is correct");
+
+    XCTAssertEqualWithAccuracy(0.3589164797178847, [output1 weightForNeuron:hidden1], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.4086661860762334, [output1 weightForNeuron:hidden2], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.5113012702387375, [output2 weightForNeuron:hidden1], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.5613701211079891, [output2 weightForNeuron:hidden2], .0000000000001, @"prediction is correct");
+}
+
 @end
