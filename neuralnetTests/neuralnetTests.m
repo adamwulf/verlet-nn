@@ -70,4 +70,38 @@
     XCTAssertEqualWithAccuracy(.585, [output3 output], .0000000000001, @"prediction is correct");
 }
 
+// test case from Grokking Deep Learning book by Andrew W. Trask
+- (void)testChapter3Page39
+{
+    // This is an example of a functional test case.
+    // Use XCTAssert and related functions to verify your tests produce the correct results.
+    StaticNeuron *i1 = [[StaticNeuron alloc] initWithValue:8.5];
+    StaticNeuron *i2 = [[StaticNeuron alloc] initWithValue:.65];
+    StaticNeuron *i3 = [[StaticNeuron alloc] initWithValue:1.2];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *output2 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *output3 = [[WeightedSumNeuron alloc] init];
+
+    [output1 addInput:i1 withWeight:0.1];
+    [output1 addInput:i2 withWeight:0.1];
+    [output1 addInput:i3 withWeight:-0.3];
+
+    [output2 addInput:i1 withWeight:0.1];
+    [output2 addInput:i2 withWeight:0.2];
+    [output2 addInput:i3 withWeight:0.0];
+
+    [output3 addInput:i1 withWeight:0.0];
+    [output3 addInput:i2 withWeight:1.3];
+    [output3 addInput:i3 withWeight:0.1];
+
+    // run the neural net
+    [output1 forwardPass];
+    [output2 forwardPass];
+    [output3 forwardPass];
+
+    XCTAssertEqualWithAccuracy(.555, [output1 output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.98, [output2 output], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(.965, [output3 output], .0000000000001, @"prediction is correct");
+}
+
 @end
