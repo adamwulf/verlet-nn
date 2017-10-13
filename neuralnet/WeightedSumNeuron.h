@@ -6,7 +6,7 @@
 //  Copyright © 2017 Adam Wulf. All rights reserved.
 //
 
-#import <neuralnet/neuralnet.h>
+#import "AbstractNeuron.h"
 
 @interface WeightedSumNeuron : AbstractNeuron
 

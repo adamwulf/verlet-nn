@@ -6,7 +6,7 @@
 //  Copyright © 2017 Adam Wulf. All rights reserved.
 //
 
-#import <neuralnet/neuralnet.h>
+#import "AbstractNeuron.h"
 
 @interface AbstractNeuron ()
 
@@ -14,5 +14,7 @@
 @property(nonatomic, readonly) NSMutableArray *weights;
 
 @property(nonatomic, assign) CGFloat currentValue;
+
+- (CGFloat)derivativeNeuronAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal;
 
 @end

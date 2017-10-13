@@ -27,8 +27,8 @@
 
 #pragma mark - Error
 
-- (CGFloat)rawErrorFor:(CGFloat)goal;
+- (CGFloat)simpleErrorFor:(CGFloat)goal;
 
-- (CGFloat)meanSquaredErrorFor:(CGFloat)goal;
+- (CGFloat)errorFor:(CGFloat)goal;
 
 @end

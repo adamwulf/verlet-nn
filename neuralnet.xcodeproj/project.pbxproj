@@ -17,6 +17,8 @@
 		C56413481F8C5FB200809F9E /* WeightedSumNeuron.h in Headers */ = {isa = PBXBuildFile; fileRef = C56413461F8C5FB200809F9E /* WeightedSumNeuron.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C56413491F8C5FB200809F9E /* WeightedSumNeuron.m in Sources */ = {isa = PBXBuildFile; fileRef = C56413471F8C5FB200809F9E /* WeightedSumNeuron.m */; };
 		C564134C1F8C601C00809F9E /* AbstractNeuron+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = C564134B1F8C601C00809F9E /* AbstractNeuron+Protected.h */; };
+		C564134F1F8C999600809F9E /* SimpleTraskNeuron.h in Headers */ = {isa = PBXBuildFile; fileRef = C564134D1F8C999600809F9E /* SimpleTraskNeuron.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C56413501F8C999600809F9E /* SimpleTraskNeuron.m in Sources */ = {isa = PBXBuildFile; fileRef = C564134E1F8C999600809F9E /* SimpleTraskNeuron.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		C56413471F8C5FB200809F9E /* WeightedSumNeuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeightedSumNeuron.m; sourceTree = "<group>"; };
 		C564134A1F8C5FE700809F9E /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		C564134B1F8C601C00809F9E /* AbstractNeuron+Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AbstractNeuron+Protected.h"; sourceTree = "<group>"; };
+		C564134D1F8C999600809F9E /* SimpleTraskNeuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleTraskNeuron.h; sourceTree = "<group>"; };
+		C564134E1F8C999600809F9E /* SimpleTraskNeuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleTraskNeuron.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +98,8 @@
 				C564133F1F8C5AE100809F9E /* AbstractNeuron.m */,
 				C56413461F8C5FB200809F9E /* WeightedSumNeuron.h */,
 				C56413471F8C5FB200809F9E /* WeightedSumNeuron.m */,
+				C564134D1F8C999600809F9E /* SimpleTraskNeuron.h */,
+				C564134E1F8C999600809F9E /* SimpleTraskNeuron.m */,
 				C56413421F8C5CB900809F9E /* StaticNeuron.h */,
 				C56413431F8C5CB900809F9E /* StaticNeuron.m */,
 			);
@@ -119,6 +125,7 @@
 				C56413441F8C5CB900809F9E /* StaticNeuron.h in Headers */,
 				C56413351F8C5A6F00809F9E /* neuralnet.h in Headers */,
 				C56413481F8C5FB200809F9E /* WeightedSumNeuron.h in Headers */,
+				C564134F1F8C999600809F9E /* SimpleTraskNeuron.h in Headers */,
 				C564134C1F8C601C00809F9E /* AbstractNeuron+Protected.h in Headers */,
 				C56413401F8C5AE100809F9E /* AbstractNeuron.h in Headers */,
 			);
@@ -225,6 +232,7 @@
 				C56413451F8C5CB900809F9E /* StaticNeuron.m in Sources */,
 				C56413411F8C5AE100809F9E /* AbstractNeuron.m in Sources */,
 				C56413491F8C5FB200809F9E /* WeightedSumNeuron.m in Sources */,
+				C56413501F8C999600809F9E /* SimpleTraskNeuron.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

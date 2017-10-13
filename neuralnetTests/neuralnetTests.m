@@ -182,15 +182,15 @@
     const CGFloat kGoal = 0.8;
 
     XCTAssertEqualWithAccuracy(0.25, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(-0.55, [output rawErrorFor:kGoal], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.3025, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(-0.55, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.3025, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testChapter4Page57
 {
     StaticNeuron *input = [[StaticNeuron alloc] initWithValue:.5];
-    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
+    SimpleTraskNeuron *output = [[SimpleTraskNeuron alloc] init];
     [output addInput:input withWeight:0.5];
 
     const CGFloat kGoal = 0.8;
@@ -199,20 +199,20 @@
     [output forwardPass];
 
     XCTAssertEqualWithAccuracy(0.25, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(-0.55, [output rawErrorFor:kGoal], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.3025, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(-0.55, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.3025, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
     [output forwardPass];
 
     XCTAssertEqualWithAccuracy(0.3875, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.17015625, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.17015625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
     [output forwardPass];
 
     XCTAssertEqualWithAccuracy(0.490625, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.095712890625, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.095712890625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     for (int i = 4; i <= 20; i++) {
         [output backPropagateFor:kGoal];
@@ -221,14 +221,14 @@
 
     // the book truncates the output number
     XCTAssertEqualWithAccuracy(0.79767444457811509, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.00000540820802026, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.00000540820802026, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 }
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testChapter4Page59
 {
     StaticNeuron *input = [[StaticNeuron alloc] initWithValue:8.5];
-    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
+    SimpleTraskNeuron *output = [[SimpleTraskNeuron alloc] init];
     [output addInput:input withWeight:0.1];
 
     // run the neural net
@@ -237,8 +237,8 @@
     const CGFloat kGoal = 1.0;
 
     XCTAssertEqualWithAccuracy(0.85, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(-0.15, [output rawErrorFor:kGoal], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.0225, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(-0.15, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.0225, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal withLearningRate:0.01];
 
@@ -249,7 +249,7 @@
 - (void)testChapter4Page62
 {
     StaticNeuron *input = [[StaticNeuron alloc] initWithValue:1.1];
-    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
+    SimpleTraskNeuron *output = [[SimpleTraskNeuron alloc] init];
     [output addInput:input withWeight:0.0];
 
     // run the neural net
@@ -258,8 +258,8 @@
     const CGFloat kGoal = 0.8;
 
     XCTAssertEqualWithAccuracy(0.0, [output output], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(-0.8, [output rawErrorFor:kGoal], .0000000000001, @"prediction is correct");
-    XCTAssertEqualWithAccuracy(0.64, [output meanSquaredErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(-0.8, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
+    XCTAssertEqualWithAccuracy(0.64, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
 
