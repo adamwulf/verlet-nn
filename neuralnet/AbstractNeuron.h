@@ -15,6 +15,16 @@
 
 - (void)addInput:(AbstractNeuron *)neuron withWeight:(CGFloat)initialWeight;
 
+#pragma mark - Propagation
+
 - (void)forwardPass;
+
+- (void)backPropagateFor:(CGFloat)goal;
+
+#pragma mark - Error
+
+- (CGFloat)rawErrorFor:(CGFloat)goal;
+
+- (CGFloat)meanSquaredErrorFor:(CGFloat)goal;
 
 @end

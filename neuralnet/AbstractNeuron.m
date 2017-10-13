@@ -37,9 +37,41 @@
     [_weights addObject:@(initialWeight)];
 }
 
+#pragma mark - Forward Propagation
+
 - (void)forwardPass
 {
     @throw kAbstractMethodException;
+}
+
+#pragma mark - Error
+
+- (CGFloat)rawErrorFor:(CGFloat)goal
+{
+    // if our value is lower than the goal,
+    // then our error will be < 0, to signify
+    // that we're below where we should be.
+    return [self output] - goal;
+}
+
+- (CGFloat)meanSquaredErrorFor:(CGFloat)goal
+{
+    CGFloat err = [self rawErrorFor:goal];
+    return err * err;
+}
+
+#pragma mark - Gradient Descent
+
+- (void)backPropagateFor:(CGFloat)goal
+{
+    for (int i = 0; i < [[self inputs] count]; i++) {
+        AbstractNeuron *neuron = [self inputs][i];
+        CGFloat weight = [[self weights][i] doubleValue];
+
+        CGFloat dirAndAmount = [self rawErrorFor:goal] * [neuron output];
+        weight = weight - dirAndAmount;
+        [[self weights] replaceObjectAtIndex:i withObject:@(weight)];
+    }
 }
 
 @end
