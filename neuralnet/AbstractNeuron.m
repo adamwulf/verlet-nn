@@ -107,7 +107,7 @@
 
 - (void)backPropagateFor:(CGFloat)goal
 {
-    _delta = (goal - [self activation]) * [self transferDerivative];
+    _delta = ([self activation] - goal) * [self transferDerivative];
 }
 
 - (void)updateWeightsWithAlpha:(CGFloat)alpha
@@ -118,7 +118,7 @@
     for (int i = 0; i < [[self inputs] count]; i++) {
         AbstractNeuron *input = [self inputs][i];
         CGFloat weight = [[self weights][i] doubleValue];
-        weight += alpha * [self delta] * [input activation];
+        weight -= alpha * [self delta] * [input activation];
         [[self weights] replaceObjectAtIndex:i withObject:@(weight)];
     }
 }
