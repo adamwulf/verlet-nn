@@ -11,16 +11,9 @@
 
 @implementation WeightedSumNeuron
 
-- (void)forwardPass
+- (CGFloat)transferFunction:(CGFloat)activation
 {
-    CGFloat val = 0;
-    for (int i = 0; i < [[self inputs] count]; i++) {
-        AbstractNeuron *neuron = [self inputs][i];
-        CGFloat weight = [[self weights][i] doubleValue];
-        val += [neuron activation] * weight;
-    }
-
-    [self setActivation:val];
+    return activation;
 }
 
 - (CGFloat)errorFor:(CGFloat)goal
@@ -31,50 +24,16 @@
     return err * err;
 }
 
-// we use our input, weight, output, goal to define our error.
-// of these, we can only change our weight, so the calculation
-// of error is an f(weight). This means to gradient decent to
-// a better answer, we should take the derivative of the error function.
-//
-// raw error = input * weight - goal
-//
-// which we derive by: 1. [self simpleErrorFor:goal]
-//                     2. [self output] - goal
-//                     3. weight * input - goal
-//
-// and our mean squared error = f(weight) = (input * weight - goal) ^ 2
-// so our error function is: 1. (iw - g)^2 = (iw - g)(iw - g)
-//                           2. i^2w^2 - 2iwg - g^2
-//                           3. 2i^2w - 2ig.
-//
-// the derivative of our error function should be used to calculate
-// how much we should adjust our weights to correct for that error.
-//
-// the derivative of our error function is: 1. d/dw i^2w^2 - 2iwg - g^2
-//                                          2. 2i^2w - 2ig
-//                                          3. 2(wi - g)i
-//                                          4. 2 * (weight * input - goal) * input
-//
-// Note: our dirAndAmount variable that we're using to correct our weight
-// is equal to: 1. (raw error) * input
-//              2. (weight * input - goal) * input
-//
-// and this is equal to exactly twice of our derivative function calcualted above (!)
-- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
+// if I used an activation function beyond the weighted sum
+// then i'd need to use the derivative function here. for example,
+// the sigmoid activation function would mean:
+// return [self activation] * (1.0 - [self activation]);
+// but since instead of f(x) = sigmoid(x), i'm only using f(x) = x,
+// so my derivative is 1.
+- (CGFloat)transferDerivative
 {
-    AbstractNeuron *inputNeuron = [self inputs][neuronIndex];
-    CGFloat weight = [[self weights][neuronIndex] doubleValue];
-    CGFloat input = [inputNeuron activation];
-    CGFloat derivative = 2 * input * (input * weight - goal);
-
-#ifdef DEBUG
-    CGFloat rawError = [self simpleErrorFor:goal];
-    CGFloat dirAndAmount = rawError * [inputNeuron activation];
-
-    NSAssert(derivative == dirAndAmount * 2, @"derivative is twice the dirAndAmount");
-#endif
-
-    return derivative;
+    return 1;
 }
+
 
 @end

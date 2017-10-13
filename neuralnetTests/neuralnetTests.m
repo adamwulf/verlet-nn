@@ -190,7 +190,7 @@
 - (void)testChapter4Page57
 {
     StaticNeuron *input = [[StaticNeuron alloc] initWithValue:.5];
-    SimpleTraskNeuron *output = [[SimpleTraskNeuron alloc] init];
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
     [output addInput:input withWeight:0.5];
 
     const CGFloat kGoal = 0.8;
@@ -203,12 +203,14 @@
     XCTAssertEqualWithAccuracy(0.3025, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:1.0];
     [output forwardPass];
 
     XCTAssertEqualWithAccuracy(0.3875, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.17015625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:1.0];
     [output forwardPass];
 
     XCTAssertEqualWithAccuracy(0.490625, [output activation], .0000000000001, @"prediction is correct");
@@ -216,6 +218,7 @@
 
     for (int i = 4; i <= 20; i++) {
         [output backPropagateFor:kGoal];
+        [output updateWeightsWithAlpha:1.0];
         [output forwardPass];
     }
 
@@ -228,7 +231,7 @@
 - (void)testChapter4Page59
 {
     StaticNeuron *input = [[StaticNeuron alloc] initWithValue:8.5];
-    SimpleTraskNeuron *output = [[SimpleTraskNeuron alloc] init];
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
     [output addInput:input withWeight:0.1];
 
     // run the neural net
@@ -240,7 +243,8 @@
     XCTAssertEqualWithAccuracy(-0.15, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.0225, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
-    [output backPropagateFor:kGoal withLearningRate:0.01];
+    [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:0.01];
 
     XCTAssertEqualWithAccuracy(0.11275, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 }
@@ -249,7 +253,7 @@
 - (void)testChapter4Page62
 {
     StaticNeuron *input = [[StaticNeuron alloc] initWithValue:1.1];
-    SimpleTraskNeuron *output = [[SimpleTraskNeuron alloc] init];
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
     [output addInput:input withWeight:0.0];
 
     // run the neural net
@@ -262,23 +266,27 @@
     XCTAssertEqualWithAccuracy(0.64, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:1.0];
 
     XCTAssertEqualWithAccuracy(0.88, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 
     [output forwardPass];
     [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:1.0];
 
     // the book rounds this value
     XCTAssertEqualWithAccuracy(0.6952, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 
     [output forwardPass];
     [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:1.0];
 
     // the book rounds this value
     XCTAssertEqualWithAccuracy(0.734008, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 
     [output forwardPass];
     [output backPropagateFor:kGoal];
+    [output updateWeightsWithAlpha:1.0];
 
     // the book rounds this value
     XCTAssertEqualWithAccuracy(0.72585832, [output weightForNeuron:input], .0000000000001, @"prediction is correct");

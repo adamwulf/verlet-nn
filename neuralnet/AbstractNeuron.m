@@ -15,7 +15,6 @@
 @synthesize inputs = _inputs;
 @synthesize outputs = _outputs;
 @synthesize weights = _weights;
-@synthesize previousWeights = _previousWeights;
 @synthesize activation = _activation;
 
 - (instancetype)init
@@ -52,24 +51,24 @@
     return [[self weights][index] doubleValue];
 }
 
-- (CGFloat)previousWeightForNeuron:(AbstractNeuron *)neuron
-{
-    NSInteger index = [[self inputs] indexOfObject:neuron];
-
-    if (index == NSNotFound) {
-        @throw [NSException exceptionWithName:@"NeuronException" reason:@"Cannot find weight for neuron that's not an input" userInfo:nil];
-    }
-
-    if (index >= [_previousWeights count]) {
-        @throw [NSException exceptionWithName:@"NeuronException" reason:@"Cannot find previous weight for neuron that's not an input" userInfo:nil];
-    }
-
-    return [[self previousWeights][index] doubleValue];
-}
 
 #pragma mark - Forward Propagation
 
 - (void)forwardPass
+{
+    CGFloat val = 0;
+    for (int i = 0; i < [[self inputs] count]; i++) {
+        AbstractNeuron *neuron = [self inputs][i];
+        CGFloat weight = [[self weights][i] doubleValue];
+        val += [neuron activation] * weight;
+    }
+
+    val = [self transferFunction:val];
+
+    _activation = val;
+}
+
+- (CGFloat)transferFunction:(CGFloat)activation
 {
     @throw kAbstractMethodException;
 }
@@ -89,11 +88,6 @@
     @throw kAbstractMethodException;
 }
 
-- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
-{
-    @throw kAbstractMethodException;
-}
-
 #pragma mark - Gradient Descent
 
 - (void)backpropWithLearningRate:(CGFloat)alpha
@@ -101,38 +95,37 @@
     CGFloat dErrTotaldOut = 0;
     for (int i = 0; i < [[self outputs] count]; i++) {
         AbstractNeuron *outNeuron = [self outputs][i];
-        CGFloat deltaOutput = [outNeuron derivative];
-        CGFloat outWeight = [outNeuron previousWeightForNeuron:self];
+        CGFloat deltaOutput = [outNeuron delta];
+        CGFloat outWeight = [outNeuron weightForNeuron:self];
         CGFloat dErrOutdOut = (deltaOutput * outWeight);
 
         dErrTotaldOut += dErrOutdOut;
     }
 
-    _derivative = dErrTotaldOut;
-
-    [self backPropagateFor:dErrTotaldOut withLearningRate:alpha];
+    _delta = dErrTotaldOut * [self transferDerivative];
 }
 
 - (void)backPropagateFor:(CGFloat)goal
 {
-    _derivative = goal - [self activation];
-
-    [self backPropagateFor:goal withLearningRate:1.0];
+    _delta = (goal - [self activation]) * [self transferDerivative];
 }
 
-- (void)backPropagateFor:(CGFloat)goal withLearningRate:(CGFloat)alpha
+- (void)updateWeightsWithAlpha:(CGFloat)alpha
 {
     NSAssert(alpha > 0, @"alpha > 0");
     NSAssert(alpha <= 1.0, @"alpha <= 1.0");
 
-    _previousWeights = [_weights copy];
-
     for (int i = 0; i < [[self inputs] count]; i++) {
+        AbstractNeuron *input = [self inputs][i];
         CGFloat weight = [[self weights][i] doubleValue];
-        CGFloat derivative = [self derivativeInputAtIndex:i andGoal:goal];
-        weight = weight - (derivative * alpha);
+        weight += alpha * [self delta] * [input activation];
         [[self weights] replaceObjectAtIndex:i withObject:@(weight)];
     }
+}
+
+- (CGFloat)transferDerivative
+{
+    @throw kAbstractMethodException;
 }
 
 @end

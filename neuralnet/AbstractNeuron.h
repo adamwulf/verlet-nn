@@ -23,7 +23,7 @@
 
 - (void)backPropagateFor:(CGFloat)goal;
 
-- (void)backPropagateFor:(CGFloat)goal withLearningRate:(CGFloat)alpha;
+- (void)updateWeightsWithAlpha:(CGFloat)alpha;
 
 #pragma mark - Error
 

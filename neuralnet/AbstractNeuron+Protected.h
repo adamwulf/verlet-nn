@@ -13,13 +13,20 @@
 @property(nonatomic, readonly) NSMutableArray *inputs;
 @property(nonatomic, readonly) NSMutableArray *outputs;
 @property(nonatomic, readonly) NSMutableArray *weights;
-@property(nonatomic, readonly) NSMutableArray *previousWeights;
 
-@property(nonatomic, assign) CGFloat activation;
-@property(nonatomic, readonly) CGFloat derivative;
-
-- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal;
+@property(nonatomic, readonly) CGFloat delta;
 
 - (void)addOutput:(AbstractNeuron *)neuron;
+
+#pragma mark - Abstract
+
+// probably (goal - activation)^2
+- (CGFloat)errorFor:(CGFloat)goal;
+
+// probably the sigmoid function
+- (CGFloat)transferFunction:(CGFloat)activation;
+
+// probably the derivative of the sigmoid function
+- (CGFloat)transferDerivative;
 
 @end
