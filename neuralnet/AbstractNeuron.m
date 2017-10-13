@@ -70,7 +70,7 @@
     @throw kAbstractMethodException;
 }
 
-- (CGFloat)derivativeNeuronAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
+- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
 {
     @throw kAbstractMethodException;
 }
@@ -89,7 +89,7 @@
 
     for (int i = 0; i < [[self inputs] count]; i++) {
         CGFloat weight = [[self weights][i] doubleValue];
-        CGFloat derivative = [self derivativeNeuronAtIndex:i andGoal:goal];
+        CGFloat derivative = [self derivativeInputAtIndex:i andGoal:goal];
         weight = weight - (derivative * alpha);
         [[self weights] replaceObjectAtIndex:i withObject:@(weight)];
     }

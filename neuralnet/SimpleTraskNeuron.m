@@ -14,9 +14,9 @@
 // derivative, so this class separates this change from the exact math.
 @implementation SimpleTraskNeuron
 
-- (CGFloat)derivativeNeuronAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
+- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
 {
-    return [super derivativeNeuronAtIndex:neuronIndex andGoal:goal] / 2.0;
+    return [super derivativeInputAtIndex:neuronIndex andGoal:goal] / 2.0;
 }
 
 @end

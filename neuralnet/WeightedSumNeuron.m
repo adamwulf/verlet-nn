@@ -60,7 +60,7 @@
 //              2. (weight * input - goal) * input
 //
 // and this is equal to exactly twice of our derivative function calcualted above (!)
-- (CGFloat)derivativeNeuronAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
+- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal
 {
     AbstractNeuron *inputNeuron = [self inputs][neuronIndex];
     CGFloat weight = [[self weights][neuronIndex] doubleValue];

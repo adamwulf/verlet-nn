@@ -15,6 +15,6 @@
 
 @property(nonatomic, assign) CGFloat currentValue;
 
-- (CGFloat)derivativeNeuronAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal;
+- (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal;
 
 @end
