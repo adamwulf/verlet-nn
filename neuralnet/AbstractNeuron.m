@@ -84,23 +84,42 @@
 // a better answer, we should take the derivative of the error function.
 //
 // raw error = input * weight - goal
-// mean squared error = f(weight) = (input * weight - goal) ^ 2
 //
 // which we derive by: 1. [self rawErrorFor:goal]
 //                     2. [self output] - goal
 //                     3. weight * input - goal
 //
-// the derivative is per weight, so it ends up being 2 * input * weight
+// and our mean squared error = f(weight) = (input * weight - goal) ^ 2
+// so our error function is: 1. (iw - g)^2 = (iw - g)(iw - g)
+//                           2. i^2w^2 - 2iwg - g^2
+//                           3. 2i^2w - 2ig.
+//
+// the derivative of our error function should be used to calculate
+// how much we should adjust our weights to correct for that error.
+//
+// the derivative of our error function is: 1. d/dw i^2w^2 - 2iwg - g^2
+//                                          2. 2i^2w - 2ig
+//                                          3. 2(wi - g)i
+//                                          4. 2 * (weight * input - goal) * input
+//
+// Note: our dirAndAmount variable that we're using to correct our weight
+// is equal to: 1. (raw error) * input
+//              2. (weight * input - goal) * input
+//
+// and this is equal to exactly twice of our derivative function calcualted above (!)
+
 - (void)backPropagateFor:(CGFloat)goal withLearningRate:(CGFloat)alpha
 {
     NSAssert(alpha > 0, @"alpha > 0");
     NSAssert(alpha <= 1.0, @"alpha <= 1.0");
 
     for (int i = 0; i < [[self inputs] count]; i++) {
-        AbstractNeuron *neuron = [self inputs][i];
+        AbstractNeuron *inputNeuron = [self inputs][i];
         CGFloat weight = [[self weights][i] doubleValue];
+        CGFloat input = [inputNeuron output];
         CGFloat rawError = [self rawErrorFor:goal];
-        CGFloat dirAndAmount = rawError * [neuron output];
+        CGFloat dirAndAmount = rawError * [inputNeuron output];
+        CGFloat derivative = input * input * weight - 2 * input * goal;
         weight = weight - (dirAndAmount * alpha);
         [[self weights] replaceObjectAtIndex:i withObject:@(weight)];
     }
