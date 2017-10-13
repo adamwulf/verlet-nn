@@ -20,7 +20,7 @@
         val += [neuron activation] * weight;
     }
 
-    [self setCurrentValue:val];
+    [self setActivation:val];
 }
 
 - (CGFloat)errorFor:(CGFloat)goal

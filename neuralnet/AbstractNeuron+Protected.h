@@ -13,8 +13,10 @@
 @property(nonatomic, readonly) NSMutableArray *inputs;
 @property(nonatomic, readonly) NSMutableArray *outputs;
 @property(nonatomic, readonly) NSMutableArray *weights;
+@property(nonatomic, readonly) NSMutableArray *previousWeights;
 
-@property(nonatomic, assign) CGFloat currentValue;
+@property(nonatomic, assign) CGFloat activation;
+@property(nonatomic, readonly) CGFloat derivative;
 
 - (CGFloat)derivativeInputAtIndex:(NSInteger)neuronIndex andGoal:(CGFloat)goal;
 
