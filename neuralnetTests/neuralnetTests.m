@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import <neuralnet/neuralnet.h>
+#import "AbstractNeuron+Protected.h"
 
 @interface neuralnetTests : XCTestCase
 
@@ -202,14 +203,14 @@
     XCTAssertEqualWithAccuracy(-0.55, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.3025, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:1.0];
     [output forwardPass];
 
     XCTAssertEqualWithAccuracy(0.3875, [output activation], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.17015625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:1.0];
     [output forwardPass];
 
@@ -217,7 +218,7 @@
     XCTAssertEqualWithAccuracy(0.095712890625, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
     for (int i = 4; i <= 20; i++) {
-        [output backPropagateFor:kGoal];
+        [output backpropagateFor:kGoal];
         [output updateWeightsWithAlpha:1.0];
         [output forwardPass];
     }
@@ -243,7 +244,7 @@
     XCTAssertEqualWithAccuracy(-0.15, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.0225, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:0.01];
 
     XCTAssertEqualWithAccuracy(0.11275, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
@@ -265,27 +266,27 @@
     XCTAssertEqualWithAccuracy(-0.8, [output simpleErrorFor:kGoal], .0000000000001, @"prediction is correct");
     XCTAssertEqualWithAccuracy(0.64, [output errorFor:kGoal], .0000000000001, @"prediction is correct");
 
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:1.0];
 
     XCTAssertEqualWithAccuracy(0.88, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 
     [output forwardPass];
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:1.0];
 
     // the book rounds this value
     XCTAssertEqualWithAccuracy(0.6952, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 
     [output forwardPass];
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:1.0];
 
     // the book rounds this value
     XCTAssertEqualWithAccuracy(0.734008, [output weightForNeuron:input], .0000000000001, @"prediction is correct");
 
     [output forwardPass];
-    [output backPropagateFor:kGoal];
+    [output backpropagateFor:kGoal];
     [output updateWeightsWithAlpha:1.0];
 
     // the book rounds this value

@@ -19,3 +19,5 @@ FOUNDATION_EXPORT const unsigned char neuralnetVersionString[];
 #import <neuralnet/AbstractNeuron.h>
 #import <neuralnet/StaticNeuron.h>
 #import <neuralnet/WeightedSumNeuron.h>
+#import <neuralnet/InputNeuron.h>
+#import <neuralnet/SigmoidNeuron.h>

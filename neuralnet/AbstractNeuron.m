@@ -63,9 +63,7 @@
         val += [neuron activation] * weight;
     }
 
-    val = [self transferFunction:val];
-
-    _activation = val;
+    _activation = [self transferFunction:val];
 }
 
 - (CGFloat)transferFunction:(CGFloat)activation
@@ -90,8 +88,12 @@
 
 #pragma mark - Gradient Descent
 
-- (void)backpropWithLearningRate:(CGFloat)alpha
+- (void)backpropagate
 {
+    if (![[self outputs] count]) {
+        @throw [NSException exceptionWithName:@"NeuronException" reason:@"Cannot backpropagate a neuron that does not have outputs" userInfo:nil];
+    }
+
     CGFloat dErrTotaldOut = 0;
     for (int i = 0; i < [[self outputs] count]; i++) {
         AbstractNeuron *outNeuron = [self outputs][i];
@@ -105,7 +107,7 @@
     _delta = dErrTotaldOut * [self transferDerivative];
 }
 
-- (void)backPropagateFor:(CGFloat)goal
+- (void)backpropagateFor:(CGFloat)goal
 {
     _delta = ([self activation] - goal) * [self transferDerivative];
 }
@@ -119,7 +121,7 @@
         AbstractNeuron *input = [self inputs][i];
         CGFloat weight = [[self weights][i] doubleValue];
         weight -= alpha * [self delta] * [input activation];
-        [[self weights] replaceObjectAtIndex:i withObject:@(weight)];
+        [[self weights] replaceObjectAtIndex:i withObject:[NSNumber numberWithDouble:weight]];
     }
 }
 

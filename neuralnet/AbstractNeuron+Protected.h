@@ -13,8 +13,7 @@
 @property(nonatomic, readonly) NSMutableArray *inputs;
 @property(nonatomic, readonly) NSMutableArray *outputs;
 @property(nonatomic, readonly) NSMutableArray *weights;
-
-@property(nonatomic, readonly) CGFloat delta;
+@property(nonatomic, assign) CGFloat activation;
 
 - (void)addOutput:(AbstractNeuron *)neuron;
 

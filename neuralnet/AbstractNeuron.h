@@ -13,6 +13,9 @@
 
 @property(nonatomic, readonly) CGFloat activation;
 
+// the last recorded error for the neuron
+@property(nonatomic, readonly) CGFloat delta;
+
 - (void)addInput:(AbstractNeuron *)neuron withWeight:(CGFloat)initialWeight;
 
 - (CGFloat)weightForNeuron:(AbstractNeuron *)neuron;
@@ -21,7 +24,9 @@
 
 - (void)forwardPass;
 
-- (void)backPropagateFor:(CGFloat)goal;
+- (void)backpropagateFor:(CGFloat)goal;
+
+- (void)backpropagate;
 
 - (void)updateWeightsWithAlpha:(CGFloat)alpha;
 
