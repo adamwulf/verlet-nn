@@ -355,4 +355,151 @@
     XCTAssertEqualWithAccuracy(0.5613701211079891, [output2 weightForNeuron:hidden2], .0000000000001, @"prediction is correct");
 }
 
+// test for xor - this should fail since these are all linear neurons
+- (void)testLinearXOR
+{
+    CGFloat (^randF)(void) = ^{
+        return (rand() % 20000 - 10000.0) / 10000.0;
+    };
+
+    InputNeuron *leftInput = [[InputNeuron alloc] initWithValue:1.0];
+    InputNeuron *rightInput = [[InputNeuron alloc] initWithValue:0.0];
+    StaticNeuron *bias = [[StaticNeuron alloc] initWithValue:1.0];
+
+    WeightedSumNeuron *hidden1 = [[WeightedSumNeuron alloc] init];
+    [hidden1 addInput:leftInput withWeight:randF()];
+    [hidden1 addInput:rightInput withWeight:randF()];
+
+    WeightedSumNeuron *hidden2 = [[WeightedSumNeuron alloc] init];
+    [hidden2 addInput:leftInput withWeight:randF()];
+    [hidden2 addInput:rightInput withWeight:randF()];
+
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
+    [output addInput:hidden1 withWeight:randF()];
+    [output addInput:hidden2 withWeight:randF()];
+
+    [hidden1 addInput:bias withWeight:randF()];
+    [hidden2 addInput:bias withWeight:randF()];
+    [output addInput:bias withWeight:randF()];
+
+    const CGFloat alpha = 0.01;
+
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [hidden1 forwardPass];
+        [hidden2 forwardPass];
+        [output forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        [output backpropagateFor:goal];
+        [hidden1 backpropagate];
+        [hidden2 backpropagate];
+        [output updateWeightsWithAlpha:alpha];
+        [hidden1 updateWeightsWithAlpha:alpha];
+        [hidden2 updateWeightsWithAlpha:alpha];
+    };
+
+    NSArray *data = @[@[@0, @0, @0],
+                      @[@1, @0, @1],
+                      @[@0, @1, @1],
+                      @[@1, @1, @0]];
+
+    CGFloat avgError = 0;
+
+    for (NSInteger i = 0; i < 1000000; i++) {
+        NSArray *testCase = data[i % [data count]];
+
+        [leftInput setActivation:[testCase[0] doubleValue]];
+        [rightInput setActivation:[testCase[1] doubleValue]];
+
+        forwardPass();
+        backwardPass([testCase[2] doubleValue]);
+
+        avgError = avgError * 0.9 + ABS([output errorFor:[testCase[2] doubleValue]]) * 0.1;
+    }
+
+    XCTAssertEqualWithAccuracy(avgError, .25, .01);
+}
+
+// test for xor - this should fail since these are all linear neurons
+- (void)testSigmoidXOR
+{
+    CGFloat (^randF)(void) = ^{
+        return (rand() % 20000 - 10000.0) / 10000.0;
+    };
+
+    InputNeuron *leftInput = [[InputNeuron alloc] initWithValue:1.0];
+    InputNeuron *rightInput = [[InputNeuron alloc] initWithValue:0.0];
+    StaticNeuron *bias = [[StaticNeuron alloc] initWithValue:1.0];
+
+    SigmoidNeuron *hidden1 = [[SigmoidNeuron alloc] init];
+    [hidden1 addInput:leftInput withWeight:randF()];
+    [hidden1 addInput:rightInput withWeight:randF()];
+
+    SigmoidNeuron *hidden2 = [[SigmoidNeuron alloc] init];
+    [hidden2 addInput:leftInput withWeight:randF()];
+    [hidden2 addInput:rightInput withWeight:randF()];
+
+    SigmoidNeuron *output = [[SigmoidNeuron alloc] init];
+    [output addInput:hidden1 withWeight:randF()];
+    [output addInput:hidden2 withWeight:randF()];
+
+    [hidden1 addInput:bias withWeight:randF()];
+    [hidden2 addInput:bias withWeight:randF()];
+    [output addInput:bias withWeight:randF()];
+
+    const CGFloat alpha = 0.01;
+
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [hidden1 forwardPass];
+        [hidden2 forwardPass];
+        [output forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        [output backpropagateFor:goal];
+        [hidden1 backpropagate];
+        [hidden2 backpropagate];
+        [output updateWeightsWithAlpha:alpha];
+        [hidden1 updateWeightsWithAlpha:alpha];
+        [hidden2 updateWeightsWithAlpha:alpha];
+    };
+
+    NSArray *data = @[@[@0, @0, @0],
+                      @[@1, @0, @1],
+                      @[@0, @1, @1],
+                      @[@1, @1, @0]];
+
+    CGFloat avgError = 0;
+
+    for (NSInteger i = 0; i < 1000000; i++) {
+        NSArray *testCase = data[i % [data count]];
+
+        [leftInput setActivation:[testCase[0] doubleValue]];
+        [rightInput setActivation:[testCase[1] doubleValue]];
+
+        forwardPass();
+        backwardPass([testCase[2] doubleValue]);
+
+        avgError = avgError * 0.9 + ABS([output errorFor:[testCase[2] doubleValue]]) * 0.1;
+    }
+
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < [data count]; i++) {
+        NSArray *testCase = data[i % [data count]];
+
+        [leftInput setActivation:[testCase[0] doubleValue]];
+        [rightInput setActivation:[testCase[1] doubleValue]];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output activation], [testCase[2] doubleValue], .1);
+    }
+}
+
 @end
