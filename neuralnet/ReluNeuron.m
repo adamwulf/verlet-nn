@@ -1,19 +1,22 @@
 //
-//  WeightedSumNeuron.m
+//  ReluNeuron.m
 //  neuralnet
 //
-//  Created by Adam Wulf on 10/9/17.
+//  Created by Adam Wulf on 10/20/17.
 //  Copyright © 2017 Adam Wulf. All rights reserved.
 //
 
-#import "WeightedSumNeuron.h"
-#import "AbstractNeuron+Protected.h"
+#import "ReluNeuron.h"
 
-@implementation WeightedSumNeuron
+@implementation ReluNeuron
 
 - (CGFloat)transferFunction:(CGFloat)activation
 {
-    return activation;
+    if (activation > 0) {
+        return activation;
+    } else {
+        return 0;
+    }
 }
 
 - (CGFloat)errorFor:(CGFloat)goal
@@ -32,7 +35,11 @@
 // so my derivative is 1.
 - (CGFloat)transferDerivative
 {
-    return 1;
+    if ([self activation] > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 @end

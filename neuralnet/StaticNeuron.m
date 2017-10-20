@@ -7,6 +7,7 @@
 //
 
 #import "StaticNeuron.h"
+#import "AbstractNeuron+Protected.h"
 
 @implementation StaticNeuron {
     CGFloat _value;
@@ -23,6 +24,11 @@
 - (CGFloat)activation
 {
     return _value;
+}
+
+- (void)setActivation:(CGFloat)activation
+{
+    @throw [NSException exceptionWithName:@"NeuronException" reason:@"Cannot set activation of StaticNeuron" userInfo:nil];
 }
 
 - (void)addInput:(AbstractNeuron *)neuron withWeight:(CGFloat)initialWeight

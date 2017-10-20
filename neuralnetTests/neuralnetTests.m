@@ -382,7 +382,7 @@
     [hidden2 addInput:bias withWeight:randF()];
     [output addInput:bias withWeight:randF()];
 
-    const CGFloat alpha = 0.01;
+    const CGFloat alpha = 0.025;
 
 
     // run the neural net
@@ -408,7 +408,7 @@
 
     CGFloat avgError = 0;
 
-    for (NSInteger i = 0; i < 1000000; i++) {
+    for (NSInteger i = 0; i < 100000; i++) {
         NSArray *testCase = data[i % [data count]];
 
         [leftInput setActivation:[testCase[0] doubleValue]];
@@ -450,8 +450,7 @@
     [hidden2 addInput:bias withWeight:randF()];
     [output addInput:bias withWeight:randF()];
 
-    const CGFloat alpha = 0.01;
-
+    const CGFloat alpha = 0.1;
 
     // run the neural net
     void (^forwardPass)(void) = ^{
@@ -476,7 +475,7 @@
 
     CGFloat avgError = 0;
 
-    for (NSInteger i = 0; i < 1000000; i++) {
+    for (NSInteger i = 0; i < 100000; i++) {
         NSArray *testCase = data[i % [data count]];
 
         [leftInput setActivation:[testCase[0] doubleValue]];
@@ -499,6 +498,113 @@
         forwardPass();
 
         XCTAssertEqualWithAccuracy([output activation], [testCase[2] doubleValue], .1);
+    }
+}
+
+
+// test case from Grokking Deep Learning book by Andrew W. Trask
+- (void)testChapter6Page128
+{
+    CGFloat (^randF)(void) = ^{
+        return (rand() % 20000 - 10000.0) / 10000.0;
+    };
+
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
+    InputNeuron *i2 = [[InputNeuron alloc] initWithValue:.65];
+    InputNeuron *i3 = [[InputNeuron alloc] initWithValue:.65];
+    ReluNeuron *hidden1 = [[ReluNeuron alloc] init];
+    ReluNeuron *hidden2 = [[ReluNeuron alloc] init];
+    ReluNeuron *hidden3 = [[ReluNeuron alloc] init];
+    ReluNeuron *hidden4 = [[ReluNeuron alloc] init];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] init];
+
+    [hidden1 addInput:i1 withWeight:randF()];
+    [hidden1 addInput:i2 withWeight:randF()];
+    [hidden1 addInput:i3 withWeight:randF()];
+
+    [hidden2 addInput:i1 withWeight:randF()];
+    [hidden2 addInput:i2 withWeight:randF()];
+    [hidden2 addInput:i3 withWeight:randF()];
+
+    [hidden3 addInput:i1 withWeight:randF()];
+    [hidden3 addInput:i2 withWeight:randF()];
+    [hidden3 addInput:i3 withWeight:randF()];
+
+    [hidden4 addInput:i1 withWeight:randF()];
+    [hidden4 addInput:i2 withWeight:randF()];
+    [hidden4 addInput:i3 withWeight:randF()];
+
+    [output1 addInput:hidden1 withWeight:randF()];
+    [output1 addInput:hidden2 withWeight:randF()];
+    [output1 addInput:hidden3 withWeight:randF()];
+    [output1 addInput:hidden4 withWeight:randF()];
+
+    const CGFloat alpha = 0.2;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [hidden1 forwardPass];
+        [hidden2 forwardPass];
+        [hidden3 forwardPass];
+        [hidden4 forwardPass];
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        [output1 backpropagateFor:goal];
+        [hidden1 backpropagate];
+        [hidden2 backpropagate];
+        [hidden3 backpropagate];
+        [hidden4 backpropagate];
+        [output1 updateWeightsWithAlpha:alpha];
+        [hidden1 updateWeightsWithAlpha:alpha];
+        [hidden2 updateWeightsWithAlpha:alpha];
+        [hidden3 updateWeightsWithAlpha:alpha];
+        [hidden4 updateWeightsWithAlpha:alpha];
+    };
+
+    NSArray *data = @[@[@1, @0, @1],
+                      @[@0, @1, @1],
+                      @[@0, @0, @1],
+                      @[@1, @1, @1]];
+
+
+    NSArray *goal = @[@1, @1, @0, @0];
+
+    // run the neural net
+
+    CGFloat avgError = 0;
+
+    for (NSInteger iter = 0; iter < 60; iter++) {
+        for (NSInteger index = 0; index < [data count]; index++) {
+            NSArray *testCase = data[index];
+            NSNumber *target = goal[index];
+
+            [i1 setActivation:[testCase[0] doubleValue]];
+            [i2 setActivation:[testCase[1] doubleValue]];
+            [i3 setActivation:[testCase[2] doubleValue]];
+
+            forwardPass();
+            backwardPass([target doubleValue]);
+
+            avgError = avgError * 0.9 + ABS([output1 errorFor:[target doubleValue]]) * 0.1;
+        }
+    }
+
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < [data count]; i++) {
+        NSInteger index = i % [data count];
+        NSArray *testCase = data[index];
+        NSNumber *target = goal[index];
+
+        [i1 setActivation:[testCase[0] doubleValue]];
+        [i2 setActivation:[testCase[1] doubleValue]];
+        [i3 setActivation:[testCase[2] doubleValue]];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output1 activation], [target doubleValue], .1);
     }
 }
 
