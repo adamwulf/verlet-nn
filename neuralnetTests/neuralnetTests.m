@@ -19,6 +19,7 @@
 - (void)setUp
 {
     [super setUp];
+    //    srand(1);
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -475,7 +476,7 @@
 
     CGFloat avgError = 0;
 
-    for (NSInteger i = 0; i < 100000; i++) {
+    for (NSInteger i = 0; i < 200000; i++) {
         NSArray *testCase = data[i % [data count]];
 
         [leftInput setActivation:[testCase[0] doubleValue]];
@@ -501,6 +502,82 @@
     }
 }
 
+// test for xor - this should fail since these are all linear neurons
+- (void)testSigmoidXORWithBadRandomWeights
+{
+    CGFloat (^randF)(void) = ^{
+        return (rand() % 20000 - 10000.0) / 10000.0;
+    };
+
+    InputNeuron *leftInput = [[InputNeuron alloc] initWithValue:1.0];
+    InputNeuron *rightInput = [[InputNeuron alloc] initWithValue:0.0];
+    StaticNeuron *bias = [[StaticNeuron alloc] initWithValue:1.0];
+
+    SigmoidNeuron *hidden1 = [[SigmoidNeuron alloc] init];
+    [hidden1 addInput:leftInput withWeight:0.1651];
+    [hidden1 addInput:rightInput withWeight:-0.6032999999999999];
+    [hidden1 addInput:bias withWeight:-0.4913];
+
+    SigmoidNeuron *hidden2 = [[SigmoidNeuron alloc] init];
+    [hidden2 addInput:leftInput withWeight:0.3267];
+    [hidden2 addInput:rightInput withWeight:-0.0517];
+    [hidden2 addInput:bias withWeight:-0.5953000000000001];
+
+    SigmoidNeuron *output = [[SigmoidNeuron alloc] init];
+    [output addInput:hidden1 withWeight:-0.3543];
+    [output addInput:hidden2 withWeight:0.3965];
+    [output addInput:bias withWeight:-0.3629];
+
+    const CGFloat alpha = 0.1;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [hidden1 forwardPass];
+        [hidden2 forwardPass];
+        [output forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        [output backpropagateFor:goal];
+        [hidden1 backpropagate];
+        [hidden2 backpropagate];
+        [output updateWeightsWithAlpha:alpha];
+        [hidden1 updateWeightsWithAlpha:alpha];
+        [hidden2 updateWeightsWithAlpha:alpha];
+    };
+
+    NSArray *data = @[@[@0, @0, @0],
+                      @[@1, @0, @1],
+                      @[@0, @1, @1],
+                      @[@1, @1, @0]];
+
+    CGFloat avgError = 0;
+
+    for (NSInteger i = 0; i < 200000; i++) {
+        NSArray *testCase = data[i % [data count]];
+
+        [leftInput setActivation:[testCase[0] doubleValue]];
+        [rightInput setActivation:[testCase[1] doubleValue]];
+
+        forwardPass();
+        backwardPass([testCase[2] doubleValue]);
+
+        avgError = avgError * 0.9 + ABS([output errorFor:[testCase[2] doubleValue]]) * 0.1;
+    }
+
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < [data count]; i++) {
+        NSArray *testCase = data[i % [data count]];
+
+        [leftInput setActivation:[testCase[0] doubleValue]];
+        [rightInput setActivation:[testCase[1] doubleValue]];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output activation], [testCase[2] doubleValue], .1);
+    }
+}
 
 // test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testChapter6Page128
@@ -608,4 +685,163 @@
     }
 }
 
+
+- (void)testLinearSeparator
+{
+    // hand set weights so that the error is exactly 0 all the time.
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
+    InputNeuron *i2 = [[InputNeuron alloc] initWithValue:.65];
+    StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
+    WeightedSumNeuron *h1 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *h2 = [[WeightedSumNeuron alloc] init];
+    ClampNeuron *output1 = [[ClampNeuron alloc] initWithNeuron:[[WeightedSumNeuron alloc] init] andMin:0 andMax:1];
+
+    [h1 addInput:i1 withWeight:1];
+    [h1 addInput:i2 withWeight:0];
+    [h1 addInput:b withWeight:8];
+
+    [h2 addInput:i1 withWeight:0];
+    [h2 addInput:i2 withWeight:2.0];
+    [h2 addInput:b withWeight:0];
+
+    [output1 addInput:h1 withWeight:-1.0];
+    [output1 addInput:h2 withWeight:1.0];
+    [output1 addInput:b withWeight:0];
+
+    const CGFloat alpha = 0.001;
+    __block CGFloat avgError = 0;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [h1 forwardPass];
+        [h2 forwardPass];
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        if ((goal >= 1 && [output1 activation] < 1.0) ||
+            (goal<1 && [output1 activation]> 0)) {
+            [output1 backpropagateFor:goal];
+            [h1 backpropagate];
+            [h2 backpropagate];
+            [output1 updateWeightsWithAlpha:alpha];
+            [h1 updateWeightsWithAlpha:alpha];
+            [h2 updateWeightsWithAlpha:alpha];
+        }
+    };
+
+    // run the neural net
+
+    CGFloat (^line)(CGFloat x) = ^(CGFloat x) {
+        return 0.5 * x + 4;
+    };
+
+    for (NSInteger iter = 0; iter < 100000; iter++) {
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = rand() % 20 - 10;
+        CGFloat g = y > line(x) ? 1 : 0;
+
+        [i1 setActivation:x];
+        [i2 setActivation:y];
+
+        forwardPass();
+        backwardPass(g);
+
+        avgError = avgError * 0.9 + ABS([output1 errorFor:g]) * 0.1;
+    }
+
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < 10; i++) {
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = rand() % 20 - 10;
+        CGFloat g = y > line(x) ? 1 : 0;
+
+        [i1 setActivation:x];
+        [i2 setActivation:y];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output1 activation], g, .1);
+    }
+}
+
+- (void)testLinearSeparator2
+{
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
+    InputNeuron *i2 = [[InputNeuron alloc] initWithValue:.65];
+    StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
+    WeightedSumNeuron *h1 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *h2 = [[WeightedSumNeuron alloc] init];
+    ClampNeuron *output1 = [[ClampNeuron alloc] initWithNeuron:[[WeightedSumNeuron alloc] init] andMin:0 andMax:1];
+
+    [h1 addInput:i1 withWeight:.1];
+    [h1 addInput:i2 withWeight:.2];
+    [h1 addInput:b withWeight:.3];
+
+    [h2 addInput:i1 withWeight:.4];
+    [h2 addInput:i2 withWeight:.5];
+    [h2 addInput:b withWeight:.6];
+
+    [output1 addInput:h1 withWeight:0.15];
+    [output1 addInput:h2 withWeight:0.25];
+    [output1 addInput:b withWeight:0.35];
+
+    const CGFloat alpha = 0.01;
+    __block CGFloat avgError = 0;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [h1 forwardPass];
+        [h2 forwardPass];
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        if ((goal >= 1 && [output1 activation] < 1.0) ||
+            (goal<1 && [output1 activation]> 0)) {
+            [output1 backpropagateFor:goal];
+            [h1 backpropagate];
+            [h2 backpropagate];
+            [output1 updateWeightsWithAlpha:alpha];
+            [h1 updateWeightsWithAlpha:alpha];
+            [h2 updateWeightsWithAlpha:alpha];
+        }
+    };
+
+    // run the neural net
+
+    CGFloat (^line)(CGFloat x) = ^(CGFloat x) {
+        return 0.5 * x + 4;
+    };
+
+    for (NSInteger iter = 0; iter < 100000; iter++) {
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = rand() % 20 - 10;
+        CGFloat g = y > line(x) ? 1 : 0;
+
+        [i1 setActivation:x];
+        [i2 setActivation:y];
+
+        forwardPass();
+        backwardPass(g);
+
+        avgError = avgError * 0.9 + ABS([output1 errorFor:g]) * 0.1;
+    }
+
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < 10; i++) {
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = rand() % 20 - 10;
+        CGFloat g = y > line(x) ? 1 : 0;
+
+        [i1 setActivation:x];
+        [i2 setActivation:y];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output1 activation], g, .1);
+    }
+}
 @end

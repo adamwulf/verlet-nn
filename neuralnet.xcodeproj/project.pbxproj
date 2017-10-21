@@ -23,6 +23,8 @@
 		C5A3E1131F90159A00478767 /* SigmoidNeuron.m in Sources */ = {isa = PBXBuildFile; fileRef = C5A3E1111F90159A00478767 /* SigmoidNeuron.m */; };
 		C5B47C3D1F99BA6C008E8B01 /* ReluNeuron.h in Headers */ = {isa = PBXBuildFile; fileRef = C5B47C3B1F99BA6C008E8B01 /* ReluNeuron.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C5B47C3E1F99BA6C008E8B01 /* ReluNeuron.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B47C3C1F99BA6C008E8B01 /* ReluNeuron.m */; };
+		C5B47C6F1F9ADD39008E8B01 /* ClampNeuron.h in Headers */ = {isa = PBXBuildFile; fileRef = C5B47C6D1F9ADD39008E8B01 /* ClampNeuron.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5B47C701F9ADD39008E8B01 /* ClampNeuron.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B47C6E1F9ADD39008E8B01 /* ClampNeuron.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		C5A3E1111F90159A00478767 /* SigmoidNeuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SigmoidNeuron.m; sourceTree = "<group>"; };
 		C5B47C3B1F99BA6C008E8B01 /* ReluNeuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReluNeuron.h; sourceTree = "<group>"; };
 		C5B47C3C1F99BA6C008E8B01 /* ReluNeuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReluNeuron.m; sourceTree = "<group>"; };
+		C5B47C6D1F9ADD39008E8B01 /* ClampNeuron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClampNeuron.h; sourceTree = "<group>"; };
+		C5B47C6E1F9ADD39008E8B01 /* ClampNeuron.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ClampNeuron.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,8 @@
 				C56413431F8C5CB900809F9E /* StaticNeuron.m */,
 				C5A3E10C1F900AD100478767 /* InputNeuron.h */,
 				C5A3E10D1F900AD100478767 /* InputNeuron.m */,
+				C5B47C6D1F9ADD39008E8B01 /* ClampNeuron.h */,
+				C5B47C6E1F9ADD39008E8B01 /* ClampNeuron.m */,
 			);
 			path = neuralnet;
 			sourceTree = "<group>";
@@ -138,6 +144,7 @@
 			files = (
 				C5A3E10E1F900AD100478767 /* InputNeuron.h in Headers */,
 				C5B47C3D1F99BA6C008E8B01 /* ReluNeuron.h in Headers */,
+				C5B47C6F1F9ADD39008E8B01 /* ClampNeuron.h in Headers */,
 				C56413441F8C5CB900809F9E /* StaticNeuron.h in Headers */,
 				C56413351F8C5A6F00809F9E /* neuralnet.h in Headers */,
 				C56413481F8C5FB200809F9E /* WeightedSumNeuron.h in Headers */,
@@ -246,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C56413451F8C5CB900809F9E /* StaticNeuron.m in Sources */,
+				C5B47C701F9ADD39008E8B01 /* ClampNeuron.m in Sources */,
 				C56413411F8C5AE100809F9E /* AbstractNeuron.m in Sources */,
 				C5B47C3E1F99BA6C008E8B01 /* ReluNeuron.m in Sources */,
 				C56413491F8C5FB200809F9E /* WeightedSumNeuron.m in Sources */,

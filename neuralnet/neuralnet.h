@@ -22,3 +22,4 @@ FOUNDATION_EXPORT const unsigned char neuralnetVersionString[];
 #import <neuralnet/InputNeuron.h>
 #import <neuralnet/SigmoidNeuron.h>
 #import <neuralnet/ReluNeuron.h>
+#import <neuralnet/ClampNeuron.h>
