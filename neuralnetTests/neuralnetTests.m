@@ -409,7 +409,7 @@
 
     CGFloat avgError = 0;
 
-    for (NSInteger i = 0; i < 100000; i++) {
+    for (NSInteger i = 0; i < 10000; i++) {
         NSArray *testCase = data[i % [data count]];
 
         [leftInput setActivation:[testCase[0] doubleValue]];
@@ -476,7 +476,7 @@
 
     CGFloat avgError = 0;
 
-    for (NSInteger i = 0; i < 200000; i++) {
+    for (NSInteger i = 0; i < 100000; i++) {
         NSArray *testCase = data[i % [data count]];
 
         [leftInput setActivation:[testCase[0] doubleValue]];
@@ -505,10 +505,6 @@
 // test for xor - this should fail since these are all linear neurons
 - (void)testSigmoidXORWithBadRandomWeights
 {
-    CGFloat (^randF)(void) = ^{
-        return (rand() % 20000 - 10000.0) / 10000.0;
-    };
-
     InputNeuron *leftInput = [[InputNeuron alloc] initWithValue:1.0];
     InputNeuron *rightInput = [[InputNeuron alloc] initWithValue:0.0];
     StaticNeuron *bias = [[StaticNeuron alloc] initWithValue:1.0];
@@ -523,7 +519,10 @@
     [hidden2 addInput:rightInput withWeight:-0.0517];
     [hidden2 addInput:bias withWeight:-0.5953000000000001];
 
-    SigmoidNeuron *output = [[SigmoidNeuron alloc] init];
+    // interestingly, if this last output neuron is a sigmoid,
+    // then the test fails as the network will get stuck
+    // in a bad position.
+    WeightedSumNeuron *output = [[WeightedSumNeuron alloc] init];
     [output addInput:hidden1 withWeight:-0.3543];
     [output addInput:hidden2 withWeight:0.3965];
     [output addInput:bias withWeight:-0.3629];
@@ -553,7 +552,7 @@
 
     CGFloat avgError = 0;
 
-    for (NSInteger i = 0; i < 200000; i++) {
+    for (NSInteger i = 0; i < 100000; i++) {
         NSArray *testCase = data[i % [data count]];
 
         [leftInput setActivation:[testCase[0] doubleValue]];

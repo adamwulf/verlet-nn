@@ -28,4 +28,6 @@
 // probably the derivative of the sigmoid function
 - (CGFloat)transferDerivative;
 
+- (void)updateWeightAtIndex:(NSInteger)index with:(CGFloat)weight;
+
 @end

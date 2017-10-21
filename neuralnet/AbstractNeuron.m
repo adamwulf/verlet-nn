@@ -117,12 +117,21 @@
     NSAssert(alpha > 0, @"alpha > 0");
     NSAssert(alpha <= 1.0, @"alpha <= 1.0");
 
+    CGFloat total = 0;
+
     for (int i = 0; i < [[self inputs] count]; i++) {
         AbstractNeuron *input = [self inputs][i];
         CGFloat weight = [[self weights][i] doubleValue];
         weight -= alpha * [self delta] * [input activation];
-        [[self weights] replaceObjectAtIndex:i withObject:[NSNumber numberWithDouble:weight]];
+        [self updateWeightAtIndex:i with:weight];
+
+        total += ABS(weight);
     }
+}
+
+- (void)updateWeightAtIndex:(NSInteger)index with:(CGFloat)weight
+{
+    [[self weights] replaceObjectAtIndex:index withObject:[NSNumber numberWithDouble:weight]];
 }
 
 - (CGFloat)transferDerivative
