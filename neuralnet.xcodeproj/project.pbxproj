@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		C5543FA51F9DD59100269F46 /* keras-linear.py in Resources */ = {isa = PBXBuildFile; fileRef = C5543FA41F9DD59100269F46 /* keras-linear.py */; };
+		C5543FC11F9E849100269F46 /* ErrorCalculator.h in Headers */ = {isa = PBXBuildFile; fileRef = C5543FBF1F9E849100269F46 /* ErrorCalculator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5543FC21F9E849100269F46 /* ErrorCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = C5543FC01F9E849100269F46 /* ErrorCalculator.m */; };
+		C5543FC51F9E865100269F46 /* MeanSquaredError.h in Headers */ = {isa = PBXBuildFile; fileRef = C5543FC31F9E865100269F46 /* MeanSquaredError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5543FC61F9E865100269F46 /* MeanSquaredError.m in Sources */ = {isa = PBXBuildFile; fileRef = C5543FC41F9E865100269F46 /* MeanSquaredError.m */; };
+		C5543FC91F9E86E600269F46 /* TraskMeanSquaredError.h in Headers */ = {isa = PBXBuildFile; fileRef = C5543FC71F9E86E600269F46 /* TraskMeanSquaredError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C5543FCA1F9E86E600269F46 /* TraskMeanSquaredError.m in Sources */ = {isa = PBXBuildFile; fileRef = C5543FC81F9E86E600269F46 /* TraskMeanSquaredError.m */; };
 		C564132E1F8C5A6F00809F9E /* neuralnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56413241F8C5A6F00809F9E /* neuralnet.framework */; };
 		C56413331F8C5A6F00809F9E /* neuralnetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C56413321F8C5A6F00809F9E /* neuralnetTests.m */; };
 		C56413351F8C5A6F00809F9E /* neuralnet.h in Headers */ = {isa = PBXBuildFile; fileRef = C56413271F8C5A6F00809F9E /* neuralnet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,6 +46,12 @@
 
 /* Begin PBXFileReference section */
 		C5543FA41F9DD59100269F46 /* keras-linear.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = "keras-linear.py"; sourceTree = "<group>"; };
+		C5543FBF1F9E849100269F46 /* ErrorCalculator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErrorCalculator.h; sourceTree = "<group>"; };
+		C5543FC01F9E849100269F46 /* ErrorCalculator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ErrorCalculator.m; sourceTree = "<group>"; };
+		C5543FC31F9E865100269F46 /* MeanSquaredError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeanSquaredError.h; sourceTree = "<group>"; };
+		C5543FC41F9E865100269F46 /* MeanSquaredError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MeanSquaredError.m; sourceTree = "<group>"; };
+		C5543FC71F9E86E600269F46 /* TraskMeanSquaredError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TraskMeanSquaredError.h; sourceTree = "<group>"; };
+		C5543FC81F9E86E600269F46 /* TraskMeanSquaredError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TraskMeanSquaredError.m; sourceTree = "<group>"; };
 		C56413241F8C5A6F00809F9E /* neuralnet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = neuralnet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C56413271F8C5A6F00809F9E /* neuralnet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = neuralnet.h; sourceTree = "<group>"; };
 		C56413281F8C5A6F00809F9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,6 +96,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C5543FBD1F9E846500269F46 /* Neurons */ = {
+			isa = PBXGroup;
+			children = (
+				C564133E1F8C5AE100809F9E /* AbstractNeuron.h */,
+				C564134B1F8C601C00809F9E /* AbstractNeuron+Protected.h */,
+				C564133F1F8C5AE100809F9E /* AbstractNeuron.m */,
+				C56413461F8C5FB200809F9E /* WeightedSumNeuron.h */,
+				C56413471F8C5FB200809F9E /* WeightedSumNeuron.m */,
+				C5B47C3B1F99BA6C008E8B01 /* ReluNeuron.h */,
+				C5B47C3C1F99BA6C008E8B01 /* ReluNeuron.m */,
+				C5A3E1101F90159A00478767 /* SigmoidNeuron.h */,
+				C5A3E1111F90159A00478767 /* SigmoidNeuron.m */,
+				C56413421F8C5CB900809F9E /* StaticNeuron.h */,
+				C56413431F8C5CB900809F9E /* StaticNeuron.m */,
+				C5A3E10C1F900AD100478767 /* InputNeuron.h */,
+				C5A3E10D1F900AD100478767 /* InputNeuron.m */,
+				C5B47C6D1F9ADD39008E8B01 /* ClampNeuron.h */,
+				C5B47C6E1F9ADD39008E8B01 /* ClampNeuron.m */,
+			);
+			path = Neurons;
+			sourceTree = "<group>";
+		};
+		C5543FBE1F9E847000269F46 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				C5543FBF1F9E849100269F46 /* ErrorCalculator.h */,
+				C5543FC01F9E849100269F46 /* ErrorCalculator.m */,
+				C5543FC31F9E865100269F46 /* MeanSquaredError.h */,
+				C5543FC41F9E865100269F46 /* MeanSquaredError.m */,
+				C5543FC71F9E86E600269F46 /* TraskMeanSquaredError.h */,
+				C5543FC81F9E86E600269F46 /* TraskMeanSquaredError.m */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
 		C564131A1F8C5A6F00809F9E = {
 			isa = PBXGroup;
 			children = (
@@ -109,21 +156,8 @@
 				C56413271F8C5A6F00809F9E /* neuralnet.h */,
 				C564134A1F8C5FE700809F9E /* Constants.h */,
 				C56413281F8C5A6F00809F9E /* Info.plist */,
-				C564133E1F8C5AE100809F9E /* AbstractNeuron.h */,
-				C564134B1F8C601C00809F9E /* AbstractNeuron+Protected.h */,
-				C564133F1F8C5AE100809F9E /* AbstractNeuron.m */,
-				C56413461F8C5FB200809F9E /* WeightedSumNeuron.h */,
-				C56413471F8C5FB200809F9E /* WeightedSumNeuron.m */,
-				C5B47C3B1F99BA6C008E8B01 /* ReluNeuron.h */,
-				C5B47C3C1F99BA6C008E8B01 /* ReluNeuron.m */,
-				C5A3E1101F90159A00478767 /* SigmoidNeuron.h */,
-				C5A3E1111F90159A00478767 /* SigmoidNeuron.m */,
-				C56413421F8C5CB900809F9E /* StaticNeuron.h */,
-				C56413431F8C5CB900809F9E /* StaticNeuron.m */,
-				C5A3E10C1F900AD100478767 /* InputNeuron.h */,
-				C5A3E10D1F900AD100478767 /* InputNeuron.m */,
-				C5B47C6D1F9ADD39008E8B01 /* ClampNeuron.h */,
-				C5B47C6E1F9ADD39008E8B01 /* ClampNeuron.m */,
+				C5543FBE1F9E847000269F46 /* Errors */,
+				C5543FBD1F9E846500269F46 /* Neurons */,
 			);
 			path = neuralnet;
 			sourceTree = "<group>";
@@ -151,9 +185,12 @@
 				C56413441F8C5CB900809F9E /* StaticNeuron.h in Headers */,
 				C56413351F8C5A6F00809F9E /* neuralnet.h in Headers */,
 				C56413481F8C5FB200809F9E /* WeightedSumNeuron.h in Headers */,
+				C5543FC51F9E865100269F46 /* MeanSquaredError.h in Headers */,
 				C5A3E1121F90159A00478767 /* SigmoidNeuron.h in Headers */,
 				C564134C1F8C601C00809F9E /* AbstractNeuron+Protected.h in Headers */,
 				C56413401F8C5AE100809F9E /* AbstractNeuron.h in Headers */,
+				C5543FC91F9E86E600269F46 /* TraskMeanSquaredError.h in Headers */,
+				C5543FC11F9E849100269F46 /* ErrorCalculator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,9 +293,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5543FC61F9E865100269F46 /* MeanSquaredError.m in Sources */,
 				C56413451F8C5CB900809F9E /* StaticNeuron.m in Sources */,
 				C5B47C701F9ADD39008E8B01 /* ClampNeuron.m in Sources */,
+				C5543FC21F9E849100269F46 /* ErrorCalculator.m in Sources */,
 				C56413411F8C5AE100809F9E /* AbstractNeuron.m in Sources */,
+				C5543FCA1F9E86E600269F46 /* TraskMeanSquaredError.m in Sources */,
 				C5B47C3E1F99BA6C008E8B01 /* ReluNeuron.m in Sources */,
 				C56413491F8C5FB200809F9E /* WeightedSumNeuron.m in Sources */,
 				C5A3E10F1F900AD100478767 /* InputNeuron.m in Sources */,

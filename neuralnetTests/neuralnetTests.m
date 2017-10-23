@@ -855,7 +855,7 @@
     WeightedSumNeuron *hidden2 = [[WeightedSumNeuron alloc] init];
     WeightedSumNeuron *hidden3 = [[WeightedSumNeuron alloc] init];
 
-    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[MeanSquaredError calculator]];
 
     [hidden1 addInput:i1 withWeight:0.17318463];
     [hidden1 addInput:i2 withWeight:-0.01949477];
@@ -874,7 +874,7 @@
     [output1 addInput:hidden3 withWeight:-1.20925915];
 
     // why is our alpha twice that of tensorflow?
-    const CGFloat alpha = 0.2;
+    const CGFloat alpha = 0.1;
 
     // run the neural net
     void (^forwardPass)(void) = ^{

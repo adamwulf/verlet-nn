@@ -8,6 +8,7 @@
 
 #import "AbstractNeuron.h"
 #import "AbstractNeuron+Protected.h"
+#import "TraskMeanSquaredError.h"
 #import "Constants.h"
 
 @implementation AbstractNeuron
@@ -17,6 +18,17 @@
 @synthesize weights = _weights;
 @synthesize activation = _activation;
 
+-(instancetype) initWithErrorCalculator:(ErrorCalculator*)error{
+    if(self = [super init]){
+        _inputs = [NSMutableArray array];
+        _outputs = [NSMutableArray array];
+        _weights = [NSMutableArray array];
+        _activation = 0;
+        _errorCalculator = error;
+    }
+    return self;
+}
+
 - (instancetype)init
 {
     if (self = [super init]) {
@@ -24,6 +36,7 @@
         _outputs = [NSMutableArray array];
         _weights = [NSMutableArray array];
         _activation = 0;
+        _errorCalculator = [[TraskMeanSquaredError alloc] init];
     }
     return self;
 }
@@ -109,7 +122,7 @@
 
 - (void)backpropagateFor:(CGFloat)goal
 {
-    _delta = ([self activation] - goal) * [self transferDerivative];
+    _delta = [[self errorCalculator] errorDerivativeFor:goal forNeuron:self] * [self transferDerivative];
 }
 
 - (void)updateWeightsWithAlpha:(CGFloat)alpha
