@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5543FA51F9DD59100269F46 /* keras-linear.py in Resources */ = {isa = PBXBuildFile; fileRef = C5543FA41F9DD59100269F46 /* keras-linear.py */; };
 		C564132E1F8C5A6F00809F9E /* neuralnet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56413241F8C5A6F00809F9E /* neuralnet.framework */; };
 		C56413331F8C5A6F00809F9E /* neuralnetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C56413321F8C5A6F00809F9E /* neuralnetTests.m */; };
 		C56413351F8C5A6F00809F9E /* neuralnet.h in Headers */ = {isa = PBXBuildFile; fileRef = C56413271F8C5A6F00809F9E /* neuralnet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C5543FA41F9DD59100269F46 /* keras-linear.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = "keras-linear.py"; sourceTree = "<group>"; };
 		C56413241F8C5A6F00809F9E /* neuralnet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = neuralnet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C56413271F8C5A6F00809F9E /* neuralnet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = neuralnet.h; sourceTree = "<group>"; };
 		C56413281F8C5A6F00809F9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				C56413321F8C5A6F00809F9E /* neuralnetTests.m */,
 				C56413341F8C5A6F00809F9E /* Info.plist */,
+				C5543FA41F9DD59100269F46 /* keras-linear.py */,
 			);
 			path = neuralnetTests;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5543FA51F9DD59100269F46 /* keras-linear.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
