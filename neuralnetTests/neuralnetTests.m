@@ -810,11 +810,14 @@
 
     // run the neural net
 
+    // here's our divider line that we'll use to train
     CGFloat (^line)(CGFloat x) = ^(CGFloat x) {
         return 0.5 * x + 4;
     };
 
     for (NSInteger iter = 0; iter < 100000; iter++) {
+        // pick out random points between (-10,-10) and (10,10)
+        // g is 1 if the point is above the line, 0 otherwise
         CGFloat x = rand() % 20 - 10;
         CGFloat y = rand() % 20 - 10;
         CGFloat g = y > line(x) ? 1 : 0;
@@ -828,6 +831,76 @@
         avgError = avgError * 0.9 + ABS([output1 errorFor:g]) * 0.1;
     }
 
+    // at this point, our network can predict if the input point
+    // is above or below our line.
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < 10; i++) {
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = rand() % 20 - 10;
+        CGFloat g = y > line(x) ? 1 : 0;
+
+        [i1 setActivation:x];
+        [i2 setActivation:y];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output1 activation], g, .1);
+    }
+}
+
+- (void)testLinearSeparator3
+{
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
+    InputNeuron *i2 = [[InputNeuron alloc] initWithValue:.65];
+    StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
+    ClampNeuron *output1 = [[ClampNeuron alloc] initWithNeuron:[[WeightedSumNeuron alloc] init] andMin:0 andMax:1];
+
+    [output1 addInput:i1 withWeight:.1];
+    [output1 addInput:i2 withWeight:.2];
+    [output1 addInput:b withWeight:.3];
+
+    const CGFloat alpha = 0.01;
+    __block CGFloat avgError = 0;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        if ((goal >= 1 && [output1 activation] < 1.0) ||
+            (goal<1 && [output1 activation]> 0)) {
+            [output1 backpropagateFor:goal];
+            [output1 updateWeightsWithAlpha:alpha];
+        }
+    };
+
+    // run the neural net
+
+    // here's our divider line that we'll use to train
+    CGFloat (^line)(CGFloat x) = ^(CGFloat x) {
+        return 0.5 * x + 4;
+    };
+
+    for (NSInteger iter = 0; iter < 100000; iter++) {
+        // pick out random points between (-10,-10) and (10,10)
+        // g is 1 if the point is above the line, 0 otherwise
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = rand() % 20 - 10;
+        CGFloat g = y > line(x) ? 1 : 0;
+
+        [i1 setActivation:x];
+        [i2 setActivation:y];
+
+        forwardPass();
+        backwardPass(g);
+
+        avgError = avgError * 0.9 + ABS([output1 errorFor:g]) * 0.1;
+    }
+
+    // at this point, our network can predict if the input point
+    // is above or below our line.
     XCTAssertEqualWithAccuracy(avgError, 0, .01);
 
     for (NSInteger i = 0; i < 10; i++) {
