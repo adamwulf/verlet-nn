@@ -917,6 +917,68 @@
     }
 }
 
+- (void)testLinearSeparator4
+{
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
+    StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] init];
+
+    [output1 addInput:i1 withWeight:.01];
+    [output1 addInput:b withWeight:.03];
+
+    const CGFloat alpha = 0.04;
+    __block CGFloat avgError = 0;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        if ((goal >= 1 && [output1 activation] < 1.0) ||
+            (goal<1 && [output1 activation]> 0)) {
+            [output1 backpropagateFor:goal];
+            [output1 updateWeightsWithAlpha:alpha];
+        }
+    };
+
+    // run the neural net
+
+    // here's our divider line that we'll use to train
+    CGFloat (^line)(CGFloat x) = ^(CGFloat x) {
+        return 0.5 * x + 4;
+    };
+
+    for (NSInteger iter = 0; iter < 5000; iter++) {
+        // pick out random points between (-10,-10) and (10,10)
+        // g is 1 if the point is above the line, 0 otherwise
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = line(x);
+
+        [i1 setActivation:x];
+
+        forwardPass();
+        backwardPass(y);
+
+        avgError = avgError * 0.9 + ABS([output1 errorFor:y]) * 0.1;
+    }
+
+    // at this point, our network can predict if the input point
+    // is above or below our line.
+    XCTAssertEqualWithAccuracy(avgError, 0, .01);
+
+    for (NSInteger i = 0; i < 10; i++) {
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = line(x);
+
+        [i1 setActivation:x];
+
+        forwardPass();
+
+        XCTAssertEqualWithAccuracy([output1 activation], y, .1);
+    }
+}
+
 // test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testKerasSimpleLinear
 {
