@@ -984,8 +984,8 @@
     StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
     WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[SimpleError calculator]];
 
-    [output1 addInput:i1 withWeight:.01];
-    [output1 addInput:b withWeight:.02];
+    [output1 addInput:i1 withWeight:.1];
+    [output1 addInput:b withWeight:.2];
 
     const CGFloat alpha = 0.01;
     __block CGFloat avgError = 0;
@@ -1023,7 +1023,7 @@
 
     // at this point, our network can predict if the input point
     // is above or below our line.
-    XCTAssertEqualWithAccuracy(avgError, 0, .1);
+    XCTAssertEqualWithAccuracy(avgError, 0, .25);
 
     for (NSInteger i = 0; i < 10; i++) {
         CGFloat x = rand() % 20 - 10;
@@ -1033,11 +1033,10 @@
 
         forwardPass();
 
-        XCTAssertEqualWithAccuracy([output1 activation], y, .2);
+        XCTAssertEqualWithAccuracy([output1 activation], y, .25);
     }
 }
 
-// test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testKerasSimpleLinear
 {
     InputNeuron *i1 = [[InputNeuron alloc] initWithValue:1];
@@ -1128,6 +1127,96 @@
     XCTAssertEqualWithAccuracy([output1 activation], 1.0191921, .000001);
 }
 
+
+- (void)testKerasSimpleLinear2
+{
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:2.1];
+    InputNeuron *i2 = [[InputNeuron alloc] initWithValue:0.3];
+    InputNeuron *i3 = [[InputNeuron alloc] initWithValue:3.1];
+
+    WeightedSumNeuron *hidden1 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *hidden2 = [[WeightedSumNeuron alloc] init];
+    WeightedSumNeuron *hidden3 = [[WeightedSumNeuron alloc] init];
+
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[MeanSquaredError calculator]];
+
+    [hidden1 addInput:i1 withWeight:0.17318463];
+    [hidden1 addInput:i2 withWeight:-0.01949477];
+    [hidden1 addInput:i3 withWeight:-0.67797828];
+
+    [hidden2 addInput:i1 withWeight:0.50842547];
+    [hidden2 addInput:i2 withWeight:0.5068841];
+    [hidden2 addInput:i3 withWeight:0.37353373];
+
+    [hidden3 addInput:i1 withWeight:0.18504167];
+    [hidden3 addInput:i2 withWeight:-0.58431745];
+    [hidden3 addInput:i3 withWeight:-0.51648164];
+
+    [output1 addInput:hidden1 withWeight:0.35634112];
+    [output1 addInput:hidden2 withWeight:-0.69503939];
+    [output1 addInput:hidden3 withWeight:-1.20925915];
+
+    // why is our alpha twice that of tensorflow?
+    const CGFloat alpha = 0.1;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [hidden1 forwardPass];
+        [hidden2 forwardPass];
+        [hidden3 forwardPass];
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        [output1 backpropagateFor:goal];
+        [hidden1 backpropagate];
+        [hidden2 backpropagate];
+        [hidden3 backpropagate];
+        [output1 updateWeightsWithAlpha:alpha];
+        [hidden1 updateWeightsWithAlpha:alpha];
+        [hidden2 updateWeightsWithAlpha:alpha];
+        [hidden3 updateWeightsWithAlpha:alpha];
+    };
+
+    NSArray *data = @[@[@2.1, @0.3, @3.1]];
+    NSArray *goal = @[@0.7];
+
+    // run the neural net
+    [i1 setActivation:[data[0][0] doubleValue]];
+    [i2 setActivation:[data[0][1] doubleValue]];
+    [i3 setActivation:[data[0][2] doubleValue]];
+
+    forwardPass();
+
+    // before we backpropagate, check that our prediction with these weights matches that from Tensorflow
+    XCTAssertEqualWithAccuracy(ABS([output1 errorFor:[goal[0] doubleValue]]), 1.67913460732, .000001);
+    XCTAssertEqualWithAccuracy([output1 activation], -0.59581435, .000001);
+
+    backwardPass([goal[0] doubleValue]);
+
+    // after we've backpropagated once, check that our new weights match Tensorflow
+    XCTAssertEqualWithAccuracy([hidden1.weights[0] doubleValue], 0.36712044, .000001);
+    XCTAssertEqualWithAccuracy([hidden1.weights[1] doubleValue], 0.00821034, .000001);
+    XCTAssertEqualWithAccuracy([hidden1.weights[2] doubleValue], -0.3916921, .000001);
+
+    XCTAssertEqualWithAccuracy([hidden2.weights[0] doubleValue], 0.13015583, .000001);
+    XCTAssertEqualWithAccuracy([hidden2.weights[1] doubleValue], 0.45284557, .000001);
+    XCTAssertEqualWithAccuracy([hidden2.weights[2] doubleValue], -0.18486428, .000001);
+
+    XCTAssertEqualWithAccuracy([hidden3.weights[0] doubleValue], -0.47308791, .000001);
+    XCTAssertEqualWithAccuracy([hidden3.weights[1] doubleValue], -0.67833596, .000001);
+    XCTAssertEqualWithAccuracy([hidden3.weights[2] doubleValue], -1.48800635, .000001);
+
+    XCTAssertEqualWithAccuracy([output1.weights[0] doubleValue], -0.09561118, .000001);
+    XCTAssertEqualWithAccuracy([output1.weights[1] doubleValue], -0.07882446, .000001);
+    XCTAssertEqualWithAccuracy([output1.weights[2] doubleValue], -1.56892562, .000001);
+
+    forwardPass();
+
+    // after we've backpropagated once, check that our new prediction and error match Tensorflow
+    XCTAssertEqualWithAccuracy(ABS([output1 errorFor:[goal[0] doubleValue]]), 71.7446060, .0001);
+    XCTAssertEqualWithAccuracy([output1 activation], 9.17021847, .00001);
+}
 
 - (void)testChapter1
 {

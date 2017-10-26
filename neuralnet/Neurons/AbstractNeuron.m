@@ -113,7 +113,7 @@
         AbstractNeuron *outNeuron = [self outputs][i];
         CGFloat deltaOutput = [outNeuron delta];
         CGFloat outWeight = [outNeuron weightForNeuron:self];
-        CGFloat dErrOutdOut = (deltaOutput * outWeight);
+        CGFloat dErrOutdOut = deltaOutput * outWeight;
 
         dErrTotaldOut += dErrOutdOut;
     }

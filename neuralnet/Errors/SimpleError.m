@@ -16,20 +16,28 @@
     return [[SimpleError alloc] init];
 }
 
+- (CGFloat)simpleErrorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron
+{
+    return goal - [neuron activation];
+}
+
 - (CGFloat)errorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron
 {
-    // when we do our forwardPass, our output is = input * weight.
-    // our our error = f(weight) = (input * weight - goal)^2
-    return goal - [neuron activation];
+    return ABS([self simpleErrorFor:goal forNeuron:neuron]);
 }
 
 - (CGFloat)errorDerivativeFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron
 {
-    if ([self errorFor:goal forNeuron:neuron] > 0) {
-        return -1;
+    CGFloat derivABS;
+    CGFloat derivSimpleError = -1;
+
+    if ([self simpleErrorFor:goal forNeuron:neuron] > 0) {
+        derivABS = 1;
+    } else {
+        derivABS = -1;
     }
 
-    return 1;
+    return derivSimpleError * derivABS;
 }
 
 @end
