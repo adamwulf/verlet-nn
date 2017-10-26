@@ -18,8 +18,9 @@
 @synthesize weights = _weights;
 @synthesize activation = _activation;
 
--(instancetype) initWithErrorCalculator:(ErrorCalculator*)error{
-    if(self = [super init]){
+- (instancetype)initWithErrorCalculator:(ErrorCalculator *)error
+{
+    if (self = [super init]) {
         _inputs = [NSMutableArray array];
         _outputs = [NSMutableArray array];
         _weights = [NSMutableArray array];
@@ -96,7 +97,7 @@
 
 - (CGFloat)errorFor:(CGFloat)goal
 {
-    @throw kAbstractMethodException;
+    return [[self errorCalculator] errorFor:goal forNeuron:self];
 }
 
 #pragma mark - Gradient Descent

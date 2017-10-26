@@ -15,14 +15,6 @@
     return 1.0 / (1.0 + exp(-activation));
 }
 
-- (CGFloat)errorFor:(CGFloat)goal
-{
-    // when we do our forwardPass, our output is = input * weight.
-    // our our error = f(weight) = (input * weight - goal)^2
-    CGFloat err = [self activation] - goal;
-    return err * err;
-}
-
 // if I used an activation function beyond the weighted sum
 // then i'd need to use the derivative function here. for example,
 // the sigmoid activation function would mean:

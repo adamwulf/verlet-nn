@@ -21,11 +21,6 @@
     return self;
 }
 
-- (CGFloat)errorFor:(CGFloat)goal
-{
-    return 0;
-}
-
 - (CGFloat)transferFunction:(CGFloat)activation
 {
     return activation;
