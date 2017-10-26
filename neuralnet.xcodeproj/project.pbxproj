@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C53016691FA1A46600E8516F /* SimpleError.h in Headers */ = {isa = PBXBuildFile; fileRef = C53016671FA1A46600E8516F /* SimpleError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C530166A1FA1A46600E8516F /* SimpleError.m in Sources */ = {isa = PBXBuildFile; fileRef = C53016681FA1A46600E8516F /* SimpleError.m */; };
 		C5543FA51F9DD59100269F46 /* keras-linear.py in Resources */ = {isa = PBXBuildFile; fileRef = C5543FA41F9DD59100269F46 /* keras-linear.py */; };
 		C5543FC11F9E849100269F46 /* ErrorCalculator.h in Headers */ = {isa = PBXBuildFile; fileRef = C5543FBF1F9E849100269F46 /* ErrorCalculator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C5543FC21F9E849100269F46 /* ErrorCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = C5543FC01F9E849100269F46 /* ErrorCalculator.m */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C53016671FA1A46600E8516F /* SimpleError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleError.h; sourceTree = "<group>"; };
+		C53016681FA1A46600E8516F /* SimpleError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleError.m; sourceTree = "<group>"; };
 		C5543FA41F9DD59100269F46 /* keras-linear.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = "keras-linear.py"; sourceTree = "<group>"; };
 		C5543FBF1F9E849100269F46 /* ErrorCalculator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErrorCalculator.h; sourceTree = "<group>"; };
 		C5543FC01F9E849100269F46 /* ErrorCalculator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ErrorCalculator.m; sourceTree = "<group>"; };
@@ -123,6 +127,8 @@
 			children = (
 				C5543FBF1F9E849100269F46 /* ErrorCalculator.h */,
 				C5543FC01F9E849100269F46 /* ErrorCalculator.m */,
+				C53016671FA1A46600E8516F /* SimpleError.h */,
+				C53016681FA1A46600E8516F /* SimpleError.m */,
 				C5543FC31F9E865100269F46 /* MeanSquaredError.h */,
 				C5543FC41F9E865100269F46 /* MeanSquaredError.m */,
 				C5543FC71F9E86E600269F46 /* TraskMeanSquaredError.h */,
@@ -189,6 +195,7 @@
 				C5A3E1121F90159A00478767 /* SigmoidNeuron.h in Headers */,
 				C564134C1F8C601C00809F9E /* AbstractNeuron+Protected.h in Headers */,
 				C56413401F8C5AE100809F9E /* AbstractNeuron.h in Headers */,
+				C53016691FA1A46600E8516F /* SimpleError.h in Headers */,
 				C5543FC91F9E86E600269F46 /* TraskMeanSquaredError.h in Headers */,
 				C5543FC11F9E849100269F46 /* ErrorCalculator.h in Headers */,
 			);
@@ -301,6 +308,7 @@
 				C5543FCA1F9E86E600269F46 /* TraskMeanSquaredError.m in Sources */,
 				C5B47C3E1F99BA6C008E8B01 /* ReluNeuron.m in Sources */,
 				C56413491F8C5FB200809F9E /* WeightedSumNeuron.m in Sources */,
+				C530166A1FA1A46600E8516F /* SimpleError.m in Sources */,
 				C5A3E10F1F900AD100478767 /* InputNeuron.m in Sources */,
 				C5A3E1131F90159A00478767 /* SigmoidNeuron.m in Sources */,
 			);
