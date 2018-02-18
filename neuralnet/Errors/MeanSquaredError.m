@@ -20,7 +20,7 @@
 {
     // when we do our forwardPass, our output is = input * weight.
     // our our error = f(weight) = (input * weight - goal)^2
-    CGFloat err = [super errorFor:goal forNeuron:neuron];
+    CGFloat err = [super simpleErrorFor:goal forNeuron:neuron];
     return err * err;
 }
 
@@ -34,7 +34,7 @@
     // ([self activation] - goal) * [self transferDerivative]
     // note: I've pushed the -1 through so that the goal and activation switch places
     // as well, but i've left it in below for clarity about the derivative.
-    return (2 * [super errorFor:goal forNeuron:neuron] * [super errorDerivativeFor:goal forNeuron:neuron]);
+    return (2 * [super simpleErrorFor:goal forNeuron:neuron] * (-1));
 }
 
 @end

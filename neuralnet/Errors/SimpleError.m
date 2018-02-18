@@ -16,11 +16,6 @@
     return [[SimpleError alloc] init];
 }
 
-- (CGFloat)simpleErrorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron
-{
-    return goal - [neuron activation];
-}
-
 - (CGFloat)errorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron
 {
     return ABS([self simpleErrorFor:goal forNeuron:neuron]);

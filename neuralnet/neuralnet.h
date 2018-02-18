@@ -24,5 +24,6 @@ FOUNDATION_EXPORT const unsigned char neuralnetVersionString[];
 #import <neuralnet/ReluNeuron.h>
 #import <neuralnet/ClampNeuron.h>
 #import <neuralnet/ErrorCalculator.h>
+#import <neuralnet/SimpleError.h>
 #import <neuralnet/MeanSquaredError.h>
 #import <neuralnet/TraskMeanSquaredError.h>

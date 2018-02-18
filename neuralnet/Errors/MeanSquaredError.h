@@ -6,8 +6,8 @@
 //  Copyright © 2017 Adam Wulf. All rights reserved.
 //
 
-#import "SimpleError.h"
+#import "ErrorCalculator.h"
 
-@interface MeanSquaredError : SimpleError
+@interface MeanSquaredError : ErrorCalculator
 
 @end

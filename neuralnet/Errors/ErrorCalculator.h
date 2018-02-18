@@ -15,6 +15,8 @@
 
 + (instancetype)calculator;
 
+- (CGFloat)simpleErrorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron;
+
 - (CGFloat)errorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron;
 
 - (CGFloat)errorDerivativeFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron;
