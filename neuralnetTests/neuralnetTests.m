@@ -982,7 +982,7 @@
 {
     InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
     StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
-    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[SimpleError calculator]];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[ABSError calculator]];
 
     [output1 addInput:i1 withWeight:.1];
     [output1 addInput:b withWeight:.2];
@@ -1222,7 +1222,7 @@
 {
     InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
     StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
-    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[SimpleError calculator]];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[ABSError calculator]];
 
     [output1 addInput:i1 withWeight:.1];
     [output1 addInput:b withWeight:.2];

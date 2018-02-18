@@ -1,19 +1,19 @@
 //
-//  SimpleError.m
+//  ABSError.m
 //  neuralnet
 //
 //  Created by Adam Wulf on 10/26/17.
 //  Copyright © 2017 Adam Wulf. All rights reserved.
 //
 
-#import "SimpleError.h"
+#import "ABSError.h"
 #import "AbstractNeuron.h"
 
-@implementation SimpleError
+@implementation ABSError
 
 + (instancetype)calculator
 {
-    return [[SimpleError alloc] init];
+    return [[ABSError alloc] init];
 }
 
 - (CGFloat)errorFor:(CGFloat)goal forNeuron:(AbstractNeuron *)neuron
