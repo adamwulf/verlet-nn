@@ -7,7 +7,6 @@
 //
 
 #import "MeanSquaredError.h"
-#import "AbstractNeuron.h"
 
 @implementation MeanSquaredError
 

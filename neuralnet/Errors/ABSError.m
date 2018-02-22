@@ -32,7 +32,7 @@
         derivABS = -1;
     }
 
-    return derivSimpleError * derivABS;
+    return derivABS * derivSimpleError;
 }
 
 @end

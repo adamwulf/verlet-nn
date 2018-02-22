@@ -1247,7 +1247,7 @@
         return 1.8 * x + 32;
     };
 
-    for (NSInteger iter = 0; iter < 5000; iter++) {
+    for (NSInteger iter = 0; iter < 3600; iter++) {
         // pick out random points between (-10,-10) and (10,10)
         // g is 1 if the point is above the line, 0 otherwise
         CGFloat x = rand() % 20 - 10;
@@ -1258,7 +1258,55 @@
         forwardPass();
         backwardPass(y);
 
-        avgError = avgError * 0.9 + ABS([output1 errorFor:y]) * 0.1;
+        avgError = avgError * 0.99 + ABS([output1 errorFor:y]) * 0.01;
+    }
+
+    // at this point, our network can predict if the input point
+    // is above or below our line.
+    XCTAssertEqualWithAccuracy(avgError, 0, .25);
+}
+
+- (void)testChapter2
+{
+    InputNeuron *i1 = [[InputNeuron alloc] initWithValue:.65];
+    StaticNeuron *b = [[StaticNeuron alloc] initWithValue:1.0];
+    WeightedSumNeuron *output1 = [[WeightedSumNeuron alloc] initWithErrorCalculator:[MeanSquaredError calculator]];
+
+    [output1 addInput:i1 withWeight:.1];
+    [output1 addInput:b withWeight:.2];
+
+    const CGFloat alpha = 0.01;
+    __block CGFloat avgError = 0;
+
+    // run the neural net
+    void (^forwardPass)(void) = ^{
+        [output1 forwardPass];
+    };
+
+    void (^backwardPass)(CGFloat) = ^(CGFloat goal) {
+        [output1 backpropagateFor:goal];
+        [output1 updateWeightsWithAlpha:alpha];
+    };
+
+    // run the neural net
+
+    // here's our divider line that we'll use to train
+    CGFloat (^line)(CGFloat x) = ^(CGFloat x) {
+        return 1.8 * x + 32;
+    };
+
+    for (NSInteger iter = 0; iter < 800; iter++) {
+        // pick out random points between (-10,-10) and (10,10)
+        // g is 1 if the point is above the line, 0 otherwise
+        CGFloat x = rand() % 20 - 10;
+        CGFloat y = line(x);
+
+        [i1 setActivation:x];
+
+        forwardPass();
+        backwardPass(y);
+
+        avgError = avgError * 0.99 + ABS([output1 errorFor:y]) * 0.01;
     }
 
     // at this point, our network can predict if the input point
