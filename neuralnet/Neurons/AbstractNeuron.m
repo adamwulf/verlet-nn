@@ -18,18 +18,6 @@
 @synthesize weights = _weights;
 @synthesize activation = _activation;
 
-- (instancetype)initWithErrorCalculator:(ErrorCalculator *)error
-{
-    if (self = [super init]) {
-        _inputs = [NSMutableArray array];
-        _outputs = [NSMutableArray array];
-        _weights = [NSMutableArray array];
-        _activation = 0;
-        _errorCalculator = error;
-    }
-    return self;
-}
-
 - (instancetype)init
 {
     if (self = [super init]) {
@@ -37,7 +25,6 @@
         _outputs = [NSMutableArray array];
         _weights = [NSMutableArray array];
         _activation = 0;
-        _errorCalculator = [[TraskMeanSquaredError alloc] init];
     }
     return self;
 }
@@ -85,21 +72,6 @@
     @throw kAbstractMethodException;
 }
 
-#pragma mark - Error
-
-- (CGFloat)simpleErrorFor:(CGFloat)goal
-{
-    // if our value is lower than the goal,
-    // then our error will be < 0, to signify
-    // that we're below where we should be.
-    return [self activation] - goal;
-}
-
-- (CGFloat)errorFor:(CGFloat)goal
-{
-    return [[self errorCalculator] errorFor:goal forNeuron:self];
-}
-
 #pragma mark - Gradient Descent
 
 - (void)backpropagate
@@ -121,9 +93,9 @@
     _delta = dErrTotaldOut * [self transferDerivative];
 }
 
-- (void)backpropagateFor:(CGFloat)goal
+- (void)backpropagateFor:(CGFloat)errorRespectToActivation
 {
-    _delta = [[self errorCalculator] errorDerivativeFor:goal forNeuron:self] * [self transferDerivative];
+    _delta = errorRespectToActivation * [self transferDerivative];
 }
 
 - (void)updateWeightsWithAlpha:(CGFloat)alpha

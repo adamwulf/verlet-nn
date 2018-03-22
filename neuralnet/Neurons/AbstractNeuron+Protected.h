@@ -19,9 +19,6 @@
 
 #pragma mark - Abstract
 
-// probably (goal - activation)^2
-- (CGFloat)errorFor:(CGFloat)goal;
-
 // probably the sigmoid function
 - (CGFloat)transferFunction:(CGFloat)activation;
 
