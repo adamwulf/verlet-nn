@@ -29,6 +29,28 @@
     [super tearDown];
 }
 
+- (void)testRandomGenerator {
+    NSMutableArray *generated = [NSMutableArray array];
+    srand(1);
+
+    for (NSInteger i=0; i<10000; i++) {
+        int num = rand();
+        [generated addObject:@(num)];
+
+        NSLog(@"%d", num);
+    }
+
+    NSData* data = [NSJSONSerialization dataWithJSONObject:generated options:NSJSONWritingPrettyPrinted error:nil];
+    NSArray *arr = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+
+    XCTAssertEqualObjects(arr, generated);
+    XCTAssertEqualObjects(arr[100], generated[100]);
+    XCTAssertEqualObjects(arr[200], generated[200]);
+    XCTAssertEqualObjects(arr[300], generated[300]);
+    XCTAssertEqualObjects(arr[1000], generated[1000]);
+    XCTAssertEqualObjects(arr[2000], generated[2000]);
+}
+
 // test case from Grokking Deep Learning book by Andrew W. Trask
 - (void)testChapter3Page24
 {
